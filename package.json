@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "fmt": "oxfmt"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.42.0"
+  },
+  "packageManager": "pnpm@10.33.0"
+}

@@ -36,7 +36,9 @@ spec:
 - List variables (`posts`, `archives`, etc.) are `UrlContextListResult`; use `.hasPrevious()`/`.hasNext()`/`.prevUrl`/`.nextUrl` for pagination.
 - `post.content.content` is only available automatically in `post.html`; in other templates fetch it separately via `postFinder.content(postName)`.
 
-## Online Docs (fetch when full type definitions are needed)
+## Online Docs
+
+> **Halo's VO types (field names, nested structures) change across versions. Do not guess field names from training data. Always fetch the doc for the relevant template before accessing specific fields on template variables.**
 
 - index: https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/theme/template-variables/index_.md
 - post: https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/theme/template-variables/post.md

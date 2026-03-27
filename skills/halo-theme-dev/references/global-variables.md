@@ -123,6 +123,8 @@ Returns the full path to a static asset for use in non-attribute contexts (e.g. 
 
 ## Online Docs
 
+> **If you need the exact structure of `site`, `theme`, or `theme.config`, fetch the doc below — do not guess field names from training data.**
+
 https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/theme/global-variables.md
 
 ---

@@ -105,5 +105,7 @@ Halo provides a `#annotations` utility object in Thymeleaf with three methods:
 
 ## Online Docs
 
+> **`AnnotationSetting` spec and supported models may change across Halo versions. Fetch the relevant doc if unsure about supported `group`/`kind` combinations or form schema constraints.**
+
 - Using metadata in templates: https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/theme/annotations.md
 - Defining annotation forms: https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/annotations-form.md

@@ -37,7 +37,9 @@ Use `th:with` to bind the result in the current scope:
 - `metadata.name` is the unique resource identifier — it is not the display name (`displayName`/`title`).
 - Pair `settings.yaml` `categorySelect`/`tagSelect` inputs with Finder queries so users can configure query parameters in Console instead of hard-coding them in templates.
 
-## Online Docs (fetch when full method signatures are needed)
+## Online Docs
+
+> **Do not rely on training data for Finder API method signatures — Halo evolves across versions and your training data may be outdated or incomplete. Always fetch the relevant doc before writing code that calls a specific Finder method.**
 
 - postFinder: https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/theme/finder-apis/post.md
 - categoryFinder: https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/theme/finder-apis/category.md

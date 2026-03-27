@@ -12,6 +12,8 @@ description: >
 
 Halo is built on **Spring Boot + Spring WebFlux + Thymeleaf**. Themes use Thymeleaf templates for frontend page rendering.
 
+> **Important**: Halo's APIs, VO field names, and template variables evolve across versions. **Do not rely on training data for specific field names, method signatures, or type structures.** When writing code that accesses template variables or calls Finder API methods, always fetch the relevant online doc from the References section below first.
+
 ## Thymeleaf Quick Reference
 
 Full docs: https://raw.githubusercontent.com/thymeleaf/thymeleaf-docs/refs/heads/master/docs/tutorials/3.1/usingthymeleaf.md

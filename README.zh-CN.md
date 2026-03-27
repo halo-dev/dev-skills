@@ -16,10 +16,10 @@ Agent Skills 是结构化的知识包，为 AI Agent（如 Cursor、Codex 等）
 
 ```bash
 # 全局安装（在所有项目中可用）
-npx skills add halo-dev/agent-skills@halo-theme-dev -g
+npx skills add halo-dev/dev-skills@halo-theme-dev -g
 
 # 或仅安装到当前项目
-npx skills add halo-dev/agent-skills@halo-theme-dev
+npx skills add halo-dev/dev-skills@halo-theme-dev
 ```
 
 ## Skills 列表

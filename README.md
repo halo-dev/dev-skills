@@ -18,10 +18,10 @@ Skills are installed via the [Skills CLI](https://skills.sh/):
 
 ```bash
 # Install globally (available across all projects)
-npx skills add halo-dev/agent-skills@halo-theme-dev -g
+npx skills add halo-dev/dev-skills@halo-theme-dev -g
 
 # Or install into the current project only
-npx skills add halo-dev/agent-skills@halo-theme-dev
+npx skills add halo-dev/dev-skills@halo-theme-dev
 ```
 
 ## Skills

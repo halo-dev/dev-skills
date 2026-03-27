@@ -89,7 +89,7 @@ templates/
 
 ## Template Syntax (build-time only — independent of Thymeleaf)
 
-> **Important**: `include`/`slot`/`props` syntax is processed at **Vite build time**; Thymeleaf syntax is processed at **server runtime**. The two systems are fully isolated and can be mixed freely.
+> **Important**: `include`/`slot` syntax is processed at **Vite build time**; Thymeleaf syntax is processed at **server runtime**. The two systems are fully isolated and can be mixed freely.
 
 ### `<include>` — Import a partial
 
@@ -125,19 +125,6 @@ Use in a page:
 </include>
 ```
 
-### Props (passing parameters)
-
-Partial (`src/partials/post-card.html`):
-
-```html
-<li>
-  <a th:href="${{post}.status.permalink}">{{title}}</a>
-  <span>{{date}}</span>
-</li>
-```
-
-> Note: `{{prop}}` is string interpolation and **does not evaluate expressions**. For complex data, use Thymeleaf's `th:with` and similar directives.
-
 ### Include Path Resolution
 
 | Syntax | Resolves to |
@@ -146,6 +133,21 @@ Partial (`src/partials/post-card.html`):
 | `partials/foo.html` | `src/partials/foo.html` |
 | `./foo.html` | Relative to current file |
 | `/foo.html` | Relative to `src/` root |
+
+### Static Asset Paths
+
+**All HTML files — both `src/*.html` and `src/partials/*.html` — resolve static asset references relative to `src/`**, regardless of the file's actual location.
+
+```html
+<!-- src/partials/layout.html: referencing src/css/main.css -->
+<link rel="stylesheet" href="./css/main.css" />   <!-- ✅ correct (relative to src/) -->
+<link rel="stylesheet" href="../css/main.css" />   <!-- ❌ wrong (relative to file location) -->
+
+<!-- Same rule in src/index.html -->
+<script type="module" src="./js/main.ts"></script>  <!-- ✅ correct -->
+```
+
+Always write asset paths as if the file is in `src/`, even when it is inside `src/partials/`.
 
 ---
 
@@ -162,7 +164,7 @@ Partial (`src/partials/post-card.html`):
     <slot name="head">
       <title th:text="${site.title}">Site title</title>
     </slot>
-    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="./css/main.css" />
   </head>
   <body>
     <header>

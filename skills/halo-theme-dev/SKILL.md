@@ -1,13 +1,11 @@
 ---
 name: halo-theme-dev
 description: >
-  Complete guide for Halo CMS theme development. Covers theme directory structure,
-  Thymeleaf template syntax, template route mapping, template variables, Finder API,
-  global variables, theme settings, static asset management, Vite integration, and
-  custom tags. Use when: creating or modifying Halo themes, writing Thymeleaf templates,
-  calling Finder APIs, configuring theme.yaml / settings.yaml, integrating Vite,
-  adding settings forms, handling static asset references, or implementing comment/footer
-  extension points.
+  Use when creating or modifying a Halo CMS theme: writing Thymeleaf templates,
+  configuring theme.yaml or settings.yaml, calling Finder APIs, using
+  vite-plugin-halo-theme, defining theme settings forms, referencing static assets,
+  implementing halo:comment or halo:footer extension points, or defining model
+  annotation fields (AnnotationSetting).
 ---
 
 # Halo Theme Development
@@ -44,17 +42,7 @@ Core syntax cheatsheet:
 <!-- Fragment include -->
 <div th:replace="~{fragments/header :: header}"></div>
 
-<!-- Layout reuse: layout.html declares a parameterized fragment; pages pass head/content via th:replace -->
-<!-- templates/layout.html -->
-<html th:fragment="html (head, content)">
-  <head>
-    <th:block th:if="${head != null}" th:replace="${head}" />
-  </head>
-  <body>
-    <th:block th:replace="${content}" />
-  </body>
-</html>
-<!-- templates/index.html -->
+<!-- Layout reuse: pages pass fragments into a parameterized layout -->
 <html th:replace="~{layout :: html(head = null, content = ~{::content})}">
   <th:block th:fragment="content"><!-- page body --></th:block>
 </html>
@@ -63,100 +51,6 @@ Core syntax cheatsheet:
 <script th:inline="javascript">
   var url = '[(${#theme.assets("/dist/main.iife.js")})]';
 </script>
-```
-
-## Thymeleaf Best Practices
-
-**1. Prefer literal substitutions over string concatenation**
-
-```html
-<!-- ✅ readable, no quoting issues -->
-<title th:text="|${post.spec.title} - ${site.title}|"></title>
-
-<!-- ❌ verbose and error-prone -->
-<title th:text="${post.spec.title} + ' - ' + ${site.title}"></title>
-```
-
-**2. Use safe navigation `?.` to avoid NullPointerException**
-
-```html
-<!-- ✅ returns null instead of throwing if target is null -->
-<a th:target="${item.spec.target?.value}"></a>
-
-<!-- ❌ throws if target is null -->
-<a th:target="${item.spec.target.value}"></a>
-```
-
-**3. Use Elvis operator `?:` for default values**
-
-```html
-<!-- ✅ falls back to site.title when custom_footer is empty/null -->
-<p th:text="${theme.config.basic.custom_footer ?: site.title}"></p>
-```
-
-**4. Use `th:block` to group without adding extra DOM elements**
-
-```html
-<!-- ✅ th:block renders no element itself -->
-<th:block th:each="archive : ${archives.items}">
-  <h2 th:text="${archive.year}"></h2>
-  <ul>...</ul>
-</th:block>
-```
-
-**5. Use `th:classappend` / `th:attrappend` for conditional classes**
-
-```html
-<!-- ✅ appends "active" without overwriting existing classes -->
-<a th:classappend="${item.active} ? 'active'">...</a>
-
-<!-- ❌ replaces all classes -->
-<a th:class="${item.active} ? 'nav-link active' : 'nav-link'">...</a>
-```
-
-**6. Use `#lists.isEmpty()` and `#strings.isEmpty()` for null-safe checks**
-
-```html
-<div th:if="${not #lists.isEmpty(post.tags)}">
-  <a th:each="tag : ${post.tags}" th:text="${tag.spec.displayName}"></a>
-</div>
-
-<meta th:if="${not #strings.isEmpty(site.seo.description)}"
-      name="description" th:content="${site.seo.description}" />
-```
-
-**7. Do not manually add meta tags — Halo injects them automatically**
-
-Only the `<title>` tag needs to be written by the theme. Halo automatically injects the following into `<head>` at runtime — do not duplicate them:
-
-- `<meta name="description">` and `<meta name="keywords">`
-- Open Graph tags (`og:title`, `og:description`, `og:image`, etc.)
-- Twitter Card tags
-- Canonical URL
-
-```html
-<!-- ✅ only manage <title> in your layout/templates -->
-<head>
-  <title th:text="${site.title}">Site Title</title>
-  <!-- Halo handles all other meta/SEO tags automatically -->
-</head>
-
-<!-- ❌ redundant and may conflict with Halo's injected tags -->
-<head>
-  <title th:text="${site.title}">Site Title</title>
-  <meta name="description" th:content="${site.seo.description}" />
-  <meta property="og:title" th:content="${site.title}" />
-</head>
-```
-
-**8. Use `@{${url}}` for dynamic permalink URLs**
-
-```html
-<!-- ✅ correct: wraps the runtime URL in Thymeleaf's URL context -->
-<a th:href="@{${post.status.permalink}}">...</a>
-
-<!-- ❌ wrong: bypasses URL processing -->
-<a th:href="${post.status.permalink}">...</a>
 ```
 
 ## Development Workflow
@@ -191,3 +85,4 @@ Usage: copy the directory into `themes/` in your Halo working directory, ensure 
 | [references/template-tags.md](references/template-tags.md) | Custom tags (halo:comment extension point, halo:footer injection) | Integrating comment plugins, injecting footer code |
 | [references/annotations.md](references/annotations.md) | AnnotationSetting for model custom fields, `#annotations` utility for reading metadata in templates | Adding custom fields to menu items/posts/categories and using them in templates |
 | [references/packaging.md](references/packaging.md) | Packaging a theme as a ZIP using `@halo-dev/theme-package-cli` | Preparing a theme for release or upload |
+| [references/thymeleaf-tips.md](references/thymeleaf-tips.md) | Halo-specific Thymeleaf best practices: literal substitutions, safe navigation, meta tag rules, permalink syntax | Writing any template file |

@@ -15,7 +15,7 @@
       <nav th:with="menu = ${menuFinder.getPrimary()}">
         <a
           th:each="item : ${menu.menuItems}"
-          th:href="${item.status.href}"
+          th:href="@{${item.status.href}}"
           th:text="${item.status.displayName}"
           th:target="${item.spec.target?.value}"
         ></a>

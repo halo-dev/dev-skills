@@ -4,7 +4,7 @@
   th:replace="~{layout :: html(head = ~{::head}, content = ~{::content})}"
 >
   <th:block th:fragment="head">
-    <title th:text="${singlePage.spec.title} + ' - ' + ${site.title}"></title>
+    <title th:text="|${singlePage.spec.title} - ${site.title}|"></title>
   </th:block>
   <th:block th:fragment="content">
     <article>

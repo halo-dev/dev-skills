@@ -8,8 +8,8 @@
     <ul>
       <li th:each="cat : ${categories.items}">
         <a
-          th:href="${cat.status.permalink}"
-          th:text="${cat.spec.displayName} + ' (' + ${cat.postCount} + ')'"
+          th:href="@{${cat.status.permalink}}"
+          th:text="|${cat.spec.displayName} (${cat.postCount})|"
         ></a>
       </li>
     </ul>

@@ -4,7 +4,7 @@
   th:replace="~{layout :: html(head = ~{::head}, content = ~{::content})}"
 >
   <th:block th:fragment="head">
-    <title th:text="${post.spec.title} + ' - ' + ${site.title}"></title>
+    <title th:text="|${post.spec.title} - ${site.title}|"></title>
   </th:block>
   <th:block th:fragment="content">
     <article>
@@ -14,7 +14,7 @@
       <div th:if="${not #lists.isEmpty(post.tags)}">
         <a
           th:each="tag : ${post.tags}"
-          th:href="${tag.status.permalink}"
+          th:href="@{${tag.status.permalink}}"
           th:text="${tag.spec.displayName}"
         ></a>
       </div>
@@ -23,13 +23,13 @@
     <nav th:with="cursor = ${postFinder.cursor(post.metadata.name)}">
       <a
         th:if="${cursor.hasPrevious()}"
-        th:href="${cursor.previous.status.permalink}"
+        th:href="@{${cursor.previous.status.permalink}}"
         th:text="${cursor.previous.spec.title}"
         >Previous</a
       >
       <a
         th:if="${cursor.hasNext()}"
-        th:href="${cursor.next.status.permalink}"
+        th:href="@{${cursor.next.status.permalink}}"
         th:text="${cursor.next.spec.title}"
         >Next</a
       >

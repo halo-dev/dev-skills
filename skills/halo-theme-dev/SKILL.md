@@ -65,6 +65,100 @@ Core syntax cheatsheet:
 </script>
 ```
 
+## Thymeleaf Best Practices
+
+**1. Prefer literal substitutions over string concatenation**
+
+```html
+<!-- ✅ readable, no quoting issues -->
+<title th:text="|${post.spec.title} - ${site.title}|"></title>
+
+<!-- ❌ verbose and error-prone -->
+<title th:text="${post.spec.title} + ' - ' + ${site.title}"></title>
+```
+
+**2. Use safe navigation `?.` to avoid NullPointerException**
+
+```html
+<!-- ✅ returns null instead of throwing if target is null -->
+<a th:target="${item.spec.target?.value}"></a>
+
+<!-- ❌ throws if target is null -->
+<a th:target="${item.spec.target.value}"></a>
+```
+
+**3. Use Elvis operator `?:` for default values**
+
+```html
+<!-- ✅ falls back to site.title when custom_footer is empty/null -->
+<p th:text="${theme.config.basic.custom_footer ?: site.title}"></p>
+```
+
+**4. Use `th:block` to group without adding extra DOM elements**
+
+```html
+<!-- ✅ th:block renders no element itself -->
+<th:block th:each="archive : ${archives.items}">
+  <h2 th:text="${archive.year}"></h2>
+  <ul>...</ul>
+</th:block>
+```
+
+**5. Use `th:classappend` / `th:attrappend` for conditional classes**
+
+```html
+<!-- ✅ appends "active" without overwriting existing classes -->
+<a th:classappend="${item.active} ? 'active'">...</a>
+
+<!-- ❌ replaces all classes -->
+<a th:class="${item.active} ? 'nav-link active' : 'nav-link'">...</a>
+```
+
+**6. Use `#lists.isEmpty()` and `#strings.isEmpty()` for null-safe checks**
+
+```html
+<div th:if="${not #lists.isEmpty(post.tags)}">
+  <a th:each="tag : ${post.tags}" th:text="${tag.spec.displayName}"></a>
+</div>
+
+<meta th:if="${not #strings.isEmpty(site.seo.description)}"
+      name="description" th:content="${site.seo.description}" />
+```
+
+**7. Do not manually add meta tags — Halo injects them automatically**
+
+Only the `<title>` tag needs to be written by the theme. Halo automatically injects the following into `<head>` at runtime — do not duplicate them:
+
+- `<meta name="description">` and `<meta name="keywords">`
+- Open Graph tags (`og:title`, `og:description`, `og:image`, etc.)
+- Twitter Card tags
+- Canonical URL
+
+```html
+<!-- ✅ only manage <title> in your layout/templates -->
+<head>
+  <title th:text="${site.title}">Site Title</title>
+  <!-- Halo handles all other meta/SEO tags automatically -->
+</head>
+
+<!-- ❌ redundant and may conflict with Halo's injected tags -->
+<head>
+  <title th:text="${site.title}">Site Title</title>
+  <meta name="description" th:content="${site.seo.description}" />
+  <meta property="og:title" th:content="${site.title}" />
+</head>
+```
+
+**8. Use `@{${url}}` for dynamic permalink URLs**
+
+```html
+<!-- ✅ correct: wraps the runtime URL in Thymeleaf's URL context -->
+<a th:href="@{${post.status.permalink}}">...</a>
+
+<!-- ❌ wrong: bypasses URL processing -->
+<a th:href="${post.status.permalink}">...</a>
+```
+
 ## Development Workflow
 
 1. Create a theme folder under `themes/` in the Halo working directory (must match `metadata.name` in `theme.yaml`)

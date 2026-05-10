@@ -2,17 +2,17 @@
 
 ## Template Route Mapping
 
-| Template file | URL path | Main variables | `_templateId` |
-| ------------- | -------- | -------------- | ------------- |
-| `templates/index.html` | `/` | `posts` | `index` |
-| `templates/post.html` | `/archives/:slug` | `post` | `post` |
-| `templates/page.html` | `/:slug` | `singlePage` | `page` |
-| `templates/archives.html` | `/archives[/:year[/:month]]` | `archives` | `archives` |
-| `templates/tags.html` | `/tags` | `tags` | `tags` |
-| `templates/tag.html` | `/tags/:slug` | `tag`, `posts` | `tag` |
-| `templates/categories.html` | `/categories` | `categories` | `categories` |
-| `templates/category.html` | `/categories/:slug` | `category`, `posts` | `category` |
-| `templates/author.html` | `/authors/:slug` | `author`, `posts` | `author` |
+| Template file               | URL path                     | Main variables      | `_templateId` |
+| --------------------------- | ---------------------------- | ------------------- | ------------- |
+| `templates/index.html`      | `/`                          | `posts`             | `index`       |
+| `templates/post.html`       | `/archives/:slug`            | `post`              | `post`        |
+| `templates/page.html`       | `/:slug`                     | `singlePage`        | `page`        |
+| `templates/archives.html`   | `/archives[/:year[/:month]]` | `archives`          | `archives`    |
+| `templates/tags.html`       | `/tags`                      | `tags`              | `tags`        |
+| `templates/tag.html`        | `/tags/:slug`                | `tag`, `posts`      | `tag`         |
+| `templates/categories.html` | `/categories`                | `categories`        | `categories`  |
+| `templates/category.html`   | `/categories/:slug`          | `category`, `posts` | `category`    |
+| `templates/author.html`     | `/authors/:slug`             | `author`, `posts`   | `author`      |
 
 > Route prefixes (`/archives`, `/tags`, `/categories`) can be customized by users in Console system settings.
 
@@ -25,7 +25,7 @@ spec:
   customTemplates:
     post:
       - name: Documentation
-        file: post_documentation.html  # create under templates/
+        file: post_documentation.html # create under templates/
 ```
 
 > After modifying theme.yaml, click "Reload Theme Configuration" on the theme page in Console.

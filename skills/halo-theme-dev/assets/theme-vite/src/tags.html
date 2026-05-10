@@ -6,11 +6,7 @@
   <h1>Tags</h1>
   <ul class="tag-list">
     <li th:each="tag : ${tags.items}">
-      <a
-        th:href="@{${tag.status.permalink}}"
-        th:text="${tag.spec.displayName}"
-        class="tag"
-      ></a>
+      <a th:href="@{${tag.status.permalink}}" th:text="${tag.spec.displayName}" class="tag"></a>
     </li>
   </ul>
 

@@ -19,9 +19,11 @@ Skills are installed via the [Skills CLI](https://skills.sh/):
 ```bash
 # Install globally (available across all projects)
 npx skills add halo-dev/dev-skills@halo-theme-dev -g
+npx skills add halo-dev/dev-skills@halo-plugin-dev -g
 
 # Or install into the current project only
 npx skills add halo-dev/dev-skills@halo-theme-dev
+npx skills add halo-dev/dev-skills@halo-plugin-dev
 ```
 
 ## Skills
@@ -46,6 +48,21 @@ Everything needed to build a complete Halo theme from scratch.
 | `theme-minimal/` | Zero-build-tool theme using Thymeleaf layout fragments |
 | `theme-vite/` | Full Vite project with `vite-plugin-halo-theme`, partials, and TailwindCSS-ready setup |
 
+### [`halo-plugin-dev`](skills/halo-plugin-dev/)
+
+Everything needed to build a complete Halo plugin from scratch.
+
+**Covers:**
+
+- Plugin directory structure and `plugin.yaml` manifest configuration
+- Java backend: custom extensions (`AbstractExtension`, `@GVK`), custom APIs (`CustomEndpoint`, `@Controller`)
+- Plugin lifecycle (`BasePlugin` start/stop/delete) with `SchemeManager` registration and cleanup
+- RBAC role templates with view/manage roles and anonymous aggregation
+- Vue 3 frontend: `definePlugin`, route registration for Console and User Center
+- UI build setup via `@halo-dev/ui-plugin-bundler-kit` (Vite/Rsbuild)
+- Theme integration via `@Finder` annotation for Thymeleaf template variables
+- DevTools workflow (`haloServer`, `reload`, `watch`) and OpenAPI client generation
+
 ## Structure
 
 ```
@@ -68,3 +85,4 @@ To add a new skill, see the [skill creator guide](https://github.com/halo-dev/ha
 - [Halo Developer Docs](https://docs.halo.run/developer-guide/theme/structure) — official documentation
 - [theme-starter](https://github.com/halo-dev/theme-starter) — minimal theme template
 - [theme-vite-starter](https://github.com/halo-dev/theme-vite-starter) — Vite-based theme template
+- [plugin-starter](https://github.com/halo-dev/plugin-starter) — minimal plugin template

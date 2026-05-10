@@ -31,17 +31,17 @@ Extension point tag for the comment component. When a plugin (such as the offici
 
 ### Attributes
 
-| Attribute | Description |
-| --------- | ----------- |
-| `group` | Resource group |
-| `kind` | Resource type |
-| `name` | Unique resource identifier (`metadata.name`) |
+| Attribute | Description                                  |
+| --------- | -------------------------------------------- |
+| `group`   | Resource group                               |
+| `kind`    | Resource type                                |
+| `name`    | Unique resource identifier (`metadata.name`) |
 
 ### Supported Resource Types
 
-| Resource | `group` | `kind` |
-| -------- | ------- | ------ |
-| Post | `content.halo.run` | `Post` |
+| Resource    | `group`            | `kind`       |
+| ----------- | ------------------ | ------------ |
+| Post        | `content.halo.run` | `Post`       |
 | Single page | `content.halo.run` | `SinglePage` |
 
 ---

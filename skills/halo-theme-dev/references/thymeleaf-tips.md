@@ -28,7 +28,9 @@
 ```html
 <th:block th:each="archive : ${archives.items}">
   <h2 th:text="${archive.year}"></h2>
-  <ul>...</ul>
+  <ul>
+    ...
+  </ul>
 </th:block>
 ```
 
@@ -53,6 +55,7 @@
 **7. Do not manually add meta tags — Halo injects them automatically**
 
 Only `<title>` needs to be in the theme. Halo automatically injects at runtime:
+
 - `<meta name="description">` and `<meta name="keywords">`
 - Open Graph tags (`og:title`, `og:description`, `og:image`, etc.)
 - Twitter Card tags and canonical URL

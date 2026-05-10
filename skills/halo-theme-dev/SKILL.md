@@ -76,16 +76,16 @@ Usage: copy the directory into `themes/` in your Halo working directory, ensure 
 
 ## References Index
 
-| File | Content | When to read |
-| ---- | ------- | ------------ |
-| [references/structure-and-config.md](references/structure-and-config.md) | Directory structure, theme.yaml fields, settings.yaml form definition | Creating a theme, configuring theme.yaml/settings.yaml |
-| [references/vite-plugin.md](references/vite-plugin.md) | vite-plugin-halo-theme integration guide, include/slot template syntax, TailwindCSS integration | Setting up a Vite-based theme (recommended) |
-| [references/templates.md](references/templates.md) | Template route mapping, available variables per template | Writing template files |
-| [references/global-variables.md](references/global-variables.md) | Global variables (site, theme, theme.config) and type definitions | Accessing site info or theme setting values |
-| [references/finder-apis.md](references/finder-apis.md) | All Finder APIs (postFinder, categoryFinder, tagFinder, menuFinder, singlePageFinder, etc.) | Querying data from any template |
-| [references/static-resources.md](references/static-resources.md) | Static asset reference methods (`@{}`, `#theme.assets()`) | Referencing CSS/JS/images in plain HTML themes |
-| [references/template-tags.md](references/template-tags.md) | Custom tags (halo:comment extension point, halo:footer injection) | Integrating comment plugins, injecting footer code |
-| [references/official-plugins.md](references/official-plugins.md) | Official plugin integration: pluginFinder.available(), search widget, dark mode color scheme adaptation | Adding search, adapting dark mode for plugin UI |
-| [references/annotations.md](references/annotations.md) | AnnotationSetting for model custom fields, `#annotations` utility for reading metadata in templates | Adding custom fields to menu items/posts/categories and using them in templates |
-| [references/packaging.md](references/packaging.md) | Packaging a theme as a ZIP using `@halo-dev/theme-package-cli` | Preparing a theme for release or upload |
-| [references/thymeleaf-tips.md](references/thymeleaf-tips.md) | Halo-specific Thymeleaf best practices: literal substitutions, safe navigation, meta tag rules, permalink syntax | Writing any template file |
+| File                                                                     | Content                                                                                                          | When to read                                                                    |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| [references/structure-and-config.md](references/structure-and-config.md) | Directory structure, theme.yaml fields, settings.yaml form definition                                            | Creating a theme, configuring theme.yaml/settings.yaml                          |
+| [references/vite-plugin.md](references/vite-plugin.md)                   | vite-plugin-halo-theme integration guide, include/slot template syntax, TailwindCSS integration                  | Setting up a Vite-based theme (recommended)                                     |
+| [references/templates.md](references/templates.md)                       | Template route mapping, available variables per template                                                         | Writing template files                                                          |
+| [references/global-variables.md](references/global-variables.md)         | Global variables (site, theme, theme.config) and type definitions                                                | Accessing site info or theme setting values                                     |
+| [references/finder-apis.md](references/finder-apis.md)                   | All Finder APIs (postFinder, categoryFinder, tagFinder, menuFinder, singlePageFinder, etc.)                      | Querying data from any template                                                 |
+| [references/static-resources.md](references/static-resources.md)         | Static asset reference methods (`@{}`, `#theme.assets()`)                                                        | Referencing CSS/JS/images in plain HTML themes                                  |
+| [references/template-tags.md](references/template-tags.md)               | Custom tags (halo:comment extension point, halo:footer injection)                                                | Integrating comment plugins, injecting footer code                              |
+| [references/official-plugins.md](references/official-plugins.md)         | Official plugin integration: pluginFinder.available(), search widget, dark mode color scheme adaptation          | Adding search, adapting dark mode for plugin UI                                 |
+| [references/annotations.md](references/annotations.md)                   | AnnotationSetting for model custom fields, `#annotations` utility for reading metadata in templates              | Adding custom fields to menu items/posts/categories and using them in templates |
+| [references/packaging.md](references/packaging.md)                       | Packaging a theme as a ZIP using `@halo-dev/theme-package-cli`                                                   | Preparing a theme for release or upload                                         |
+| [references/thymeleaf-tips.md](references/thymeleaf-tips.md)             | Halo-specific Thymeleaf best practices: literal substitutions, safe navigation, meta tag rules, permalink syntax | Writing any template file                                                       |

@@ -28,12 +28,12 @@ theme-package --all
 
 ## Default Package Contents (without `--all`)
 
-| Included | Description |
-| -------- | ----------- |
-| `templates/` | Templates and static assets |
+| Included           | Description                                       |
+| ------------------ | ------------------------------------------------- |
+| `templates/`       | Templates and static assets                       |
 | `*.yaml` / `*.yml` | Config files: `theme.yaml`, `settings.yaml`, etc. |
-| `i18n/` | Internationalization files (if present) |
-| `README.md` | Documentation file (if present) |
-| `LICENSE` | License file (if present) |
+| `i18n/`            | Internationalization files (if present)           |
+| `README.md`        | Documentation file (if present)                   |
+| `LICENSE`          | License file (if present)                         |
 
 > For Vite-based themes, run `npm run build` first to generate the `templates/` output, then run the packaging command.

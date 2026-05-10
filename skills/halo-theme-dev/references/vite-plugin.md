@@ -127,12 +127,12 @@ Use in a page:
 
 ### Include Path Resolution
 
-| Syntax | Resolves to |
-| ------ | ----------- |
-| `foo.html` | `src/partials/foo.html` (preferred) |
-| `partials/foo.html` | `src/partials/foo.html` |
-| `./foo.html` | Relative to current file |
-| `/foo.html` | Relative to `src/` root |
+| Syntax              | Resolves to                         |
+| ------------------- | ----------------------------------- |
+| `foo.html`          | `src/partials/foo.html` (preferred) |
+| `partials/foo.html` | `src/partials/foo.html`             |
+| `./foo.html`        | Relative to current file            |
+| `/foo.html`         | Relative to `src/` root             |
 
 ### Static Asset Paths
 
@@ -140,11 +140,14 @@ Use in a page:
 
 ```html
 <!-- src/partials/layout.html: referencing src/css/main.css -->
-<link rel="stylesheet" href="./css/main.css" />   <!-- ✅ correct (relative to src/) -->
-<link rel="stylesheet" href="../css/main.css" />   <!-- ❌ wrong (relative to file location) -->
+<link rel="stylesheet" href="./css/main.css" />
+<!-- ✅ correct (relative to src/) -->
+<link rel="stylesheet" href="../css/main.css" />
+<!-- ❌ wrong (relative to file location) -->
 
 <!-- Same rule in src/index.html -->
-<script type="module" src="./js/main.ts"></script>  <!-- ✅ correct -->
+<script type="module" src="./js/main.ts"></script>
+<!-- ✅ correct -->
 ```
 
 Always write asset paths as if the file is in `src/`, even when it is inside `src/partials/`.

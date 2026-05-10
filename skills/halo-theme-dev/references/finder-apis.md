@@ -4,18 +4,18 @@ Finder APIs query data from **any template location** regardless of the current 
 
 ## Available Finders
 
-| Finder | Purpose |
-| ------ | ------- |
-| `postFinder` | Post list / detail / prev-next / archives |
-| `categoryFinder` | Category list / tree structure / breadcrumbs |
-| `tagFinder` | Tag list / detail |
-| `menuFinder` | Menus and menu items |
-| `singlePageFinder` | Single page list / detail |
-| `commentFinder` | Comments and replies |
-| `contributorFinder` | Contributors |
-| `siteStatsFinder` | Site statistics |
-| `themeFinder` | Theme information |
-| `pluginFinder` | Plugin information |
+| Finder              | Purpose                                      |
+| ------------------- | -------------------------------------------- |
+| `postFinder`        | Post list / detail / prev-next / archives    |
+| `categoryFinder`    | Category list / tree structure / breadcrumbs |
+| `tagFinder`         | Tag list / detail                            |
+| `menuFinder`        | Menus and menu items                         |
+| `singlePageFinder`  | Single page list / detail                    |
+| `commentFinder`     | Comments and replies                         |
+| `contributorFinder` | Contributors                                 |
+| `siteStatsFinder`   | Site statistics                              |
+| `themeFinder`       | Theme information                            |
+| `pluginFinder`      | Plugin information                           |
 
 ## Key Usage Pattern
 

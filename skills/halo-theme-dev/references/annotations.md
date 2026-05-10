@@ -10,7 +10,7 @@ Create a file (any name) in the theme root, e.g. `annotation-setting.yaml`, and 
 apiVersion: v1alpha1
 kind: AnnotationSetting
 metadata:
-  name: theme-foo-menuitem-abc123  # recommended: add theme prefix + random suffix to avoid conflicts
+  name: theme-foo-menuitem-abc123 # recommended: add theme prefix + random suffix to avoid conflicts
 spec:
   targetRef:
     group: ""
@@ -57,14 +57,14 @@ spec:
 
 ### Supported Models
 
-| Model | `group` | `kind` |
-| ----- | ------- | ------ |
-| Post | `content.halo.run` | `Post` |
-| Single page | `content.halo.run` | `SinglePage` |
-| Post category | `content.halo.run` | `Category` |
-| Post tag | `content.halo.run` | `Tag` |
-| Menu item | `""` | `MenuItem` |
-| User | `""` | `User` |
+| Model         | `group`            | `kind`       |
+| ------------- | ------------------ | ------------ |
+| Post          | `content.halo.run` | `Post`       |
+| Single page   | `content.halo.run` | `SinglePage` |
+| Post category | `content.halo.run` | `Category`   |
+| Post tag      | `content.halo.run` | `Tag`        |
+| Menu item     | `""`               | `MenuItem`   |
+| User          | `""`               | `User`       |
 
 ### Notes
 

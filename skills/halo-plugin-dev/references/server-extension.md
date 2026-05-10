@@ -9,6 +9,13 @@ Halo uses a Kubernetes CRD-like system called **Extension** for custom data stor
 > - [SchemeManager](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/SchemeManager.java)
 > - [IndexSpecs](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/index/IndexSpecs.java)
 > - [ReactiveExtensionClient](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/ReactiveExtensionClient.java)
+> - [GroupVersion](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/GroupVersion.java)
+> - [GroupVersionKind](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/GroupVersionKind.java)
+> - [QueryFactory](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/index/query/QueryFactory.java)
+> - [FieldSelector](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/router/selector/FieldSelector.java)
+> - [ExtensionUtil](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/ExtensionUtil.java)
+> - [MetadataUtil](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/MetadataUtil.java)
+> - [ExtensionOperator](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/ExtensionOperator.java)
 
 ## Creating an Extension
 
@@ -188,6 +195,59 @@ Every extension has `metadata`:
 | `metadata.finalizers`        | Cleanup hooks. Extension not deleted until empty           |
 | `metadata.labels`            | String key-value map. Auto-indexed. Use for querying       |
 | `metadata.annotations`       | String key-value map. NOT indexed. Use for extra metadata  |
+
+## GroupVersion & GroupVersionKind
+
+Programmatically construct API identifiers:
+
+```java
+// From strings
+var gv = new GroupVersion("my-plugin.halo.run", "v1alpha1");
+var gvk = GroupVersionKind.fromAPIVersionAndKind("my-plugin.halo.run/v1alpha1", "Person");
+
+// From a @GVK-annotated class
+var gvk = GroupVersionKind.fromExtension(Person.class);
+
+// Parse from API version string
+var gv = GroupVersion.parseAPIVersion("my-plugin.halo.run/v1alpha1");
+```
+
+## Query DSL (Field Selectors)
+
+Build typed queries for `ListOptions` field filtering:
+
+```java
+import static run.halo.app.extension.index.query.QueryFactory.*;
+
+ListOptions.builder()
+    .fieldQuery(and(
+        equal("spec.status", "published"),
+        contains("spec.title", keyword),
+        greaterThan("spec.priority", "10")
+    ))
+    .build();
+```
+
+Available operators: `equal`, `notEqual`, `contains`, `startsWith`, `endsWith`, `greaterThan`, `lessThan`, `greaterThanOrEqual`, `lessThanOrEqual`, `between`, `in`, `isNull`, `isNotNull`, `and`, `or`, `not`, `all`.
+
+## Extension Utilities
+
+```java
+// Check deletion state
+boolean deleted = ExtensionUtil.isDeleted(extension);
+Predicate<ExtensionOperator> notDeleted = ExtensionOperator.isNotDeleted();
+
+// Finalizer management
+ExtensionUtil.addFinalizers(metadata, Set.of("my-plugin/finalizer"));
+ExtensionUtil.removeFinalizers(metadata, Set.of("my-plugin/finalizer"));
+
+// Default sort
+Sort sort = ExtensionUtil.defaultSort(); // creationTimestamp desc, name asc
+
+// Safe metadata access
+Map<String, String> labels = MetadataUtil.nullSafeLabels(extension);
+Map<String, String> annotations = MetadataUtil.nullSafeAnnotations(extension);
+```
 
 ## Naming Rules
 

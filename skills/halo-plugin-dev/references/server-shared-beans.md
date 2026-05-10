@@ -21,6 +21,12 @@ Halo exposes several core beans that any plugin can inject via constructor injec
 > - [ReactiveSettingFetcher](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/plugin/ReactiveSettingFetcher.java)
 > - [SettingFetcher](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/plugin/SettingFetcher.java)
 > - [PluginConfigUpdatedEvent](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/plugin/PluginConfigUpdatedEvent.java)
+> - [JsonUtils](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/infra/utils/JsonUtils.java)
+> - [ExtensionUtil](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/ExtensionUtil.java)
+> - [MetadataUtil](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/MetadataUtil.java)
+> - [PageRequestImpl](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/PageRequestImpl.java)
+> - [SortResolver](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/core/extension/endpoint/SortResolver.java)
+> - [AnonymousUserConst](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/infra/AnonymousUserConst.java)
 
 ## ReactiveExtensionClient
 
@@ -191,6 +197,108 @@ public void onConfigUpdated(PluginConfigUpdatedEvent event) {
 ```
 
 > **Prerequisite**: In `plugin.yaml`, declare `settingName: my-settings` and `configMapName: my-configmap`, and create a corresponding `settings.yaml` extension resource defining the form schema and groups.
+
+## JsonUtils
+
+JSON serialization/deserialization utilities.
+
+> Note: `@Deprecated(forRemoval = true, since = "2.23.0")` — prefer `tools.jackson.databind.json.JsonMapper` in newer Halo versions.
+
+```java
+// Object to JSON string
+String json = JsonUtils.objectToJson(myObject);
+
+// JSON string to object
+MyObject obj = JsonUtils.jsonToObject(json, MyObject.class);
+
+// JSON string with generics
+Set<String> tags = JsonUtils.jsonToObject(json, new TypeReference<>() {});
+
+// Map to object
+MyObject obj = JsonUtils.mapToObject(map, MyObject.class);
+
+// Deep copy
+MyObject copy = JsonUtils.deepCopy(original);
+
+// Access the underlying ObjectMapper
+ObjectMapper mapper = JsonUtils.mapper();
+mapper.convertValue(data, new TypeReference<>() {});
+```
+
+## ExtensionUtil / MetadataUtil
+
+Utility methods for Extension lifecycle and metadata.
+
+```java
+// Check deletion state
+boolean deleted = ExtensionUtil.isDeleted(extension);
+
+// Query for non-deleted resources (for ListOptions)
+ListOptions.builder().fieldQuery(ExtensionUtil.notDeleting()).build();
+
+// Finalizer management
+ExtensionUtil.addFinalizers(metadata, Set.of("my-plugin/finalizer"));
+ExtensionUtil.removeFinalizers(metadata, Set.of("my-plugin/finalizer"));
+
+// Default sort: creationTimestamp desc, name asc
+Sort sort = ExtensionUtil.defaultSort();
+
+// Safe metadata access (auto-initializes null collections)
+Map<String, String> labels = MetadataUtil.nullSafeLabels(extension);
+Map<String, String> annotations = MetadataUtil.nullSafeAnnotations(extension);
+```
+
+## PageRequestImpl / PageRequest
+
+Pagination for list queries. Page numbers are **1-based**.
+
+```java
+// Basic pagination
+PageRequestImpl.of(page, size);                          // page >= 1, size <= 1000
+PageRequestImpl.of(page, size, Sort.by("name"));
+PageRequestImpl.ofSize(size);                            // page 1, given size
+
+// With sorting
+PageRequestImpl.of(1, 20, Sort.by(
+    Sort.Order.desc("metadata.creationTimestamp"),
+    Sort.Order.asc("metadata.name")
+));
+```
+
+## SortResolver / SortableRequest
+
+Resolve sorting from HTTP query parameters.
+
+```java
+// In a CustomEndpoint handler
+Sort sort = SortResolver.defaultInstance.resolve(exchange);
+
+// Or extend SortableRequest for standardized list queries
+public class MyQuery extends SortableRequest {
+    public MyQuery(ServerWebExchange exchange) { super(exchange); }
+
+    public ListOptions toListOptions() {
+        return labelAndFieldSelectorToListOptions(getLabelSelector(), getFieldSelector());
+    }
+}
+
+// Usage
+MyQuery query = new MyQuery(request.exchange());
+client.listBy(MyExtension.class, query.toListOptions(), query.toPageRequest());
+```
+
+Query parameter format: `?sort=field,asc` or `?sort=field,desc`. Multiple sorts: `?sort=field1,asc&sort=field2,desc`.
+
+## AnonymousUserConst
+
+Check for anonymous users:
+
+```java
+if (AnonymousUserConst.isAnonymousUser(authentication.getName())) {
+    // Handle anonymous user
+}
+// Constants: AnonymousUserConst.PRINCIPAL ("anonymousUser"), AnonymousUserConst.Role ("anonymous")
+```
 
 ## BackupRootGetter / PluginsRootGetter
 

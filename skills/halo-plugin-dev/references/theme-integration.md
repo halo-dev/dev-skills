@@ -136,6 +136,56 @@ Then in any template:
 <div th:text="${myPluginData.version}"></div>
 ```
 
+## CommentSubject
+
+Enable Halo's comment system on your custom Extension:
+
+```java
+@Component
+public class MyCommentSubject implements CommentSubject<MyExtension> {
+
+    private final ReactiveExtensionClient client;
+
+    public MyCommentSubject(ReactiveExtensionClient client) {
+        this.client = client;
+    }
+
+    @Override
+    public Mono<MyExtension> get(String name) {
+        return client.fetch(MyExtension.class, name)
+            .switchIfEmpty(Mono.error(() -> new NotFoundException("Not found")));
+    }
+
+    @Override
+    public Mono<SubjectDisplay> getSubjectDisplay(String name) {
+        return get(name).map(ext -> new SubjectDisplay(
+            ext.getSpec().getTitle(),
+            "/my-extensions/" + ext.getSpec().getSlug(),
+            "My Extension"
+        ));
+    }
+
+    @Override
+    public boolean supports(Ref ref) {
+        return GroupVersionKind.fromExtension(MyExtension.class).equals(ref.getGroupVersionKind());
+    }
+}
+```
+
+Also add a role template aggregating `comment` permissions to `anonymous`:
+
+```yaml
+metadata:
+  labels:
+    halo.run/role-template: "true"
+    halo.run/hidden: "true"
+    rbac.authorization.halo.run/aggregate-to-anonymous: "true"
+rules:
+  - apiGroups: ["my-plugin.halo.run"]
+    resources: ["my-extensions/comments"]
+    verbs: ["create", "list"]
+```
+
 ## URL Conventions for Public APIs
 
 When building APIs consumed by the theme:

@@ -121,6 +121,37 @@ Available aggregation targets: `anonymous`, `authenticated`, `editor`, etc.
 | `super-role`    | Full system access                                       |
 | `guest`         | No explicit permissions (only anonymous + authenticated) |
 
+## Web Filters
+
+Add custom WebFlux filters for request interception.
+
+```java
+@Component
+public class MyFilter implements AdditionalWebFilter {
+    @Override
+    public int getOrder() { return Ordered.LOWEST_PRECEDENCE; }
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        // Runs before security chain
+        return chain.filter(exchange);
+    }
+}
+```
+
+`AfterSecurityWebFilter` runs after the security chain (for caching, analytics, etc.).
+
+## ReactiveSecurityContextHolder
+
+Access the current authentication in reactive code:
+
+```java
+ReactiveSecurityContextHolder.getContext()
+    .map(SecurityContext::getAuthentication)
+    .map(Authentication::getName)
+    .defaultIfEmpty(AnonymousUserConst.PRINCIPAL);
+```
+
 ## UI Permissions
 
 Used in frontend route guards:

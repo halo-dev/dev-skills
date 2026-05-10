@@ -18,6 +18,9 @@ Halo exposes several core beans that any plugin can inject via constructor injec
 > - [NotificationCenter](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/notification/NotificationCenter.java)
 > - [CryptoService](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/security/authentication/CryptoService.java)
 > - [RateLimiterRegistry](https://github.com/resilience4j/resilience4j/blob/master/resilience4j-ratelimiter/src/main/java/io/github/resilience4j/ratelimiter/RateLimiterRegistry.java)
+> - [ReactiveSettingFetcher](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/plugin/ReactiveSettingFetcher.java)
+> - [SettingFetcher](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/plugin/SettingFetcher.java)
+> - [PluginConfigUpdatedEvent](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/plugin/PluginConfigUpdatedEvent.java)
 
 ## ReactiveExtensionClient
 
@@ -144,6 +147,50 @@ var rateLimiter = rateLimiterRegistry.rateLimiter(key,
 Mono<SystemInfo> info = systemInfoGetter.get();
 // Contains: title, subtitle, logo, favicon, url, version, seo, locale, timeZone, activatedThemeName
 ```
+
+## ReactiveSettingFetcher / SettingFetcher
+
+Fetch plugin configuration defined in `plugin.yaml` (`settingName` / `configMapName`).
+The fetcher caches values internally and auto-refreshes when configuration changes.
+
+**Reactive (WebFlux):**
+
+```java
+private final ReactiveSettingFetcher settingFetcher;
+
+// Fetch a typed config object by group name
+settingFetcher.fetch("seo", SeoSetting.class)
+    .doOnNext(seo -> { ... });
+
+// Get raw JsonNode by group
+settingFetcher.getSettingValue("seo");
+
+// Get all groups as a map
+settingFetcher.getSettingValues();
+```
+
+**Blocking (background tasks / non-reactive code):**
+
+```java
+private final SettingFetcher settingFetcher;
+
+Optional<SeoSetting> seo = settingFetcher.fetch("seo", SeoSetting.class);
+JsonNode raw = settingFetcher.getSettingValue("seo");
+Map<String, JsonNode> all = settingFetcher.getSettingValues();
+```
+
+**Listen for config changes:**
+
+```java
+@EventListener
+public void onConfigUpdated(PluginConfigUpdatedEvent event) {
+    if (event.getNewConfig().containsKey("seo")) {
+        // re-apply configuration
+    }
+}
+```
+
+> **Prerequisite**: In `plugin.yaml`, declare `settingName: my-settings` and `configMapName: my-configmap`, and create a corresponding `settings.yaml` extension resource defining the form schema and groups.
 
 ## BackupRootGetter / PluginsRootGetter
 

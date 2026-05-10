@@ -83,6 +83,8 @@ spec:
 ```
 
 > If `settingName` is set but the corresponding `Setting` resource does not exist, the plugin will fail to start.
+>
+> After setting this up, read the config at runtime using [`ReactiveSettingFetcher` or `SettingFetcher`](server-shared-beans.md#reactivesettingfetcher--settingfetcher).
 
 ## App Store Annotations
 

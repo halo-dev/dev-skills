@@ -16,6 +16,38 @@
 
 > Route prefixes (`/archives`, `/tags`, `/categories`) can be customized by users in Console system settings.
 
+## Error Templates
+
+Halo supports custom error pages under `templates/error/`:
+
+| Template file                        | Status code match                     |
+| ------------------------------------ | ------------------------------------- |
+| `templates/error/404.html`           | Exact 404                             |
+| `templates/error/4xx.html`           | Any 4xx client error (fallback)       |
+| `templates/error/500.html`           | Exact 500                             |
+| `templates/error/5xx.html`           | Any 5xx server error (fallback)       |
+| `templates/error/error.html`         | Catch-all default                     |
+
+Resolution order for a 404: `404.html` → `4xx.html` → `error.html`
+
+### Error template variables
+
+```html
+<div>
+  <h2 th:text="${error.status}">404</h2>
+  <p th:text="${#strings.defaultString(error.title, 'Error')}"></p>
+  <p th:if="${not #strings.isEmpty(error.detail)}" th:text="${error.detail}"></p>
+</div>
+```
+
+| Variable         | Type     | Description          |
+| ---------------- | -------- | -------------------- |
+| `error.status`   | number   | HTTP status code     |
+| `error.title`    | string   | Error title          |
+| `error.detail`   | string   | Detailed message     |
+| `error.instance` | string   | Error instance URI   |
+| `error.type`     | string   | Error type URI       |
+
 ## Custom Templates
 
 Register additional rendering templates for posts, single pages, or category archives via `spec.customTemplates` in `theme.yaml`. Supported types: `post`, `page`, `category`.

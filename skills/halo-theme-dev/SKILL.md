@@ -1,11 +1,14 @@
 ---
 name: halo-theme-dev
 description: >
-  Use when creating or modifying a Halo CMS theme: writing Thymeleaf templates,
+  Use when creating or modifying a Halo CMS theme, writing Thymeleaf templates,
   configuring theme.yaml or settings.yaml, calling Finder APIs, using
   vite-plugin-halo-theme, defining theme settings forms, referencing static assets,
-  implementing halo:comment or halo:footer extension points, or defining model
-  annotation fields (AnnotationSetting).
+  implementing halo:comment or halo:footer extension points, defining model
+  annotation fields (AnnotationSetting), adding i18n support, or handling error pages.
+  Always use this skill when the user mentions themes, templates, Thymeleaf, theme
+  configuration, or wants to customize the frontend appearance of a Halo site —
+  even if they do not explicitly say "theme."
 ---
 
 # Halo Theme Development
@@ -85,6 +88,7 @@ Usage: copy the directory into `themes/` in your Halo working directory, ensure 
 | [references/finder-apis.md](references/finder-apis.md)                   | All Finder APIs (postFinder, categoryFinder, tagFinder, menuFinder, singlePageFinder, etc.)                      | Querying data from any template                                                 |
 | [references/static-resources.md](references/static-resources.md)         | Static asset reference methods (`@{}`, `#theme.assets()`)                                                        | Referencing CSS/JS/images in plain HTML themes                                  |
 | [references/template-tags.md](references/template-tags.md)               | Custom tags (halo:comment extension point, halo:footer injection)                                                | Integrating comment plugins, injecting footer code                              |
+| [references/i18n.md](references/i18n.md)                                 | Internationalization via `.properties` files, `#messages`, `#locale`, frontend i18n injection                    | Adding multi-language support to a theme                                        |
 | [references/official-plugins.md](references/official-plugins.md)         | Official plugin integration: pluginFinder.available(), search widget, dark mode color scheme adaptation          | Adding search, adapting dark mode for plugin UI                                 |
 | [references/annotations.md](references/annotations.md)                   | AnnotationSetting for model custom fields, `#annotations` utility for reading metadata in templates              | Adding custom fields to menu items/posts/categories and using them in templates |
 | [references/packaging.md](references/packaging.md)                       | Packaging a theme as a ZIP using `@halo-dev/theme-package-cli`                                                   | Preparing a theme for release or upload                                         |

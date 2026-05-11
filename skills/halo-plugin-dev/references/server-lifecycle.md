@@ -72,7 +72,7 @@ public class MyPlugin extends BasePlugin {
     @Override
     public void start() {
         schemeManager.register(MyExtension.class, indexSpecs -> {
-            indexSpecs.add(IndexSpecs.single("spec.slug", String.class)
+            indexSpecs.add(IndexSpecs.<MyExtension, String>single("spec.slug", String.class)
                 .indexFunc(ext -> ext.getSpec().getSlug()));
         });
     }

@@ -151,25 +151,25 @@ Validation is applied on create/update automatically.
 Indexes improve query performance for `fieldSelector` and `sort`.
 
 ```java
-import static run.halo.app.extension.index.IndexSpecs.single;
-import static run.halo.app.extension.index.IndexSpecs.multi;
+import java.util.HashSet;
+import run.halo.app.extension.index.IndexSpecs;
 
 @Override
 public void start() {
     schemeManager.register(Person.class, indexSpecs -> {
         // Single-value index (returns one value, can be null)
-        indexSpecs.add(single("spec.name", String.class)
+        indexSpecs.add(IndexSpecs.<Person, String>single("spec.name", String.class)
             .indexFunc(person -> person.getSpec().getName()));
 
         // Multi-value index (returns Set of values)
-        indexSpecs.add(multi("spec.tags", String.class)
+        indexSpecs.add(IndexSpecs.<Person, String>multi("spec.tags", String.class)
             .indexFunc(person -> {
                 var tags = person.getSpec().getTags();
-                return tags == null ? Set.of() : new HashSet<>(tags);
+                return tags == null ? new HashSet<>() : new HashSet<>(tags);
             }));
 
         // Other supported types: Boolean, Integer, Long, Instant
-        indexSpecs.add(single("spec.priority", Integer.class)
+        indexSpecs.add(IndexSpecs.<Person, Integer>single("spec.priority", Integer.class)
             .indexFunc(person -> person.getSpec().getPriority()));
     });
 }

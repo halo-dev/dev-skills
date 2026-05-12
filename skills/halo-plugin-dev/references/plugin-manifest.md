@@ -84,6 +84,8 @@ spec:
 
 > If `settingName` is set but the corresponding `Setting` resource does not exist, the plugin will fail to start.
 >
+> For full form input options and Vue component usage, see [ui-forms.md](ui-forms.md).
+>
 > After setting this up, read the config at runtime using [`ReactiveSettingFetcher` or `SettingFetcher`](server-shared-beans.md#reactivesettingfetcher--settingfetcher).
 
 ## App Store Annotations

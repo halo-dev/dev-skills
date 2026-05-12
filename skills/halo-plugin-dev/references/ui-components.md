@@ -6,6 +6,8 @@ Halo provides two layers of UI primitives for plugin frontends:
 2. **Business components & directives** — globally registered, use directly without import
 
 > Full base component docs: https://halo-ui-components.pages.dev
+>
+> For forms, see [ui-forms.md](ui-forms.md) — Halo uses FormKit (globally registered) with many custom inputs.
 
 ## Base Component Library
 

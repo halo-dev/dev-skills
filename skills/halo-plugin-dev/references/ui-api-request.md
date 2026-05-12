@@ -135,6 +135,40 @@ await api.createMyResource({ myResource: { ... } });
 
 > The generated client needs `axiosInstance` as its third constructor argument so it uses Halo's pre-configured axios (with auth, base URL, error handling).
 
+## Data Fetching with `@tanstack/vue-query`
+
+For managing server state (caching, refetching, mutations) in plugin Vue components, use `@tanstack/vue-query`.
+
+> **Version warning:** Halo plugins currently use **v4** of `@tanstack/vue-query` (e.g. `^4.44.0`). Do **not** install v5 — the API is incompatible.
+
+```bash
+pnpm install @tanstack/vue-query@^4.44.0
+```
+
+Halo's plugin runtime already provides `VueQueryPlugin` setup — plugin code can use `useQuery` / `useMutation` directly without additional configuration.
+
+### Usage Example
+
+```vue
+<script setup lang="ts">
+import { consoleApiClient } from "@halo-dev/api-client";
+import { useQuery } from "@tanstack/vue-query";
+
+const { data, isLoading } = useQuery({
+  queryKey: ["attachments"],
+  queryFn: async () => {
+    const { data } = await consoleApiClient.attachment.listAttachments({
+      page: 1,
+      size: 20,
+    });
+    return data;
+  },
+});
+</script>
+```
+
+> Use `useQuery` for read operations and `useMutation` + `queryClient.invalidateQueries()` for create/update/delete operations.
+
 ## When to Use Which
 
 | Approach                              | Use for                      | Example                             |
@@ -142,3 +176,4 @@ await api.createMyResource({ myResource: { ... } });
 | `coreApiClient` / `consoleApiClient`  | Halo built-in APIs           | List posts, fetch users             |
 | `axiosInstance` directly              | Ad-hoc plugin API calls      | Simple GET/POST to custom endpoints |
 | `generateApiClient` + `axiosInstance` | Plugin APIs with type safety | Full CRUD on your custom Extension  |
+| `@tanstack/vue-query` + API clients   | Server state in Vue UI       | Cached lists, mutations, loading UI |

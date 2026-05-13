@@ -1,5 +1,12 @@
 # RBAC & Role Templates
 
+> ⚠️ **Not all plugins need to create RoleTemplate resources.** All plugin APIs are restricted to super-admin by default. If your plugin is intended for super-admin use only, there is no need to create or configure RoleTemplates at all.
+>
+> Only create RoleTemplates in the following scenarios:
+> - When certain APIs need to be accessible to other roles (e.g., editor, contributor)
+> - When certain APIs need to be publicly accessible to unauthenticated users (anonymous)
+> - When the plugin UI requires role-based permission controls
+
 All plugin APIs (auto-generated CRUD + custom) are restricted to super-admin by default. To allow other users access, define **role templates**.
 
 > Source references (Halo main branch):

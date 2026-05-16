@@ -11,7 +11,7 @@ Halo uses a Kubernetes CRD-like system called **Extension** for custom data stor
 > - [ReactiveExtensionClient](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/ReactiveExtensionClient.java)
 > - [GroupVersion](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/GroupVersion.java)
 > - [GroupVersionKind](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/GroupVersionKind.java)
-> - [QueryFactory](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/index/query/QueryFactory.java)
+> - [Queries](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/index/query/Queries.java)
 > - [FieldSelector](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/router/selector/FieldSelector.java)
 > - [ExtensionUtil](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/ExtensionUtil.java)
 > - [MetadataUtil](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/MetadataUtil.java)
@@ -29,6 +29,8 @@ Three steps:
 
 ```java
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.Instant;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import run.halo.app.extension.AbstractExtension;
@@ -54,8 +56,23 @@ public class Person extends AbstractExtension {
         @Schema(description = "Name", maxLength = 100)
         private String name;
 
+        @Schema(description = "Slug", maxLength = 100)
+        private String slug;
+
         @Schema(description = "Age", maximum = "150", minimum = "0")
         private Integer age;
+
+        @Schema(description = "Tags")
+        private List<String> tags;
+
+        @Schema(description = "Priority")
+        private Integer priority;
+
+        @Schema(description = "Pinned")
+        private Boolean pinned;
+
+        @Schema(description = "Publish time")
+        private Instant publishTime;
     }
 }
 ```
@@ -115,7 +132,7 @@ List endpoint supports:
 Example:
 
 ```
-GET /apis/my-plugin.halo.run/v1alpha1/persons?page=1&size=10&sort=name,desc&fieldSelector=spec.age=18
+GET /apis/my-plugin.halo.run/v1alpha1/persons?page=1&size=10&sort=metadata.name,desc&fieldSelector=spec.age=18
 ```
 
 ## Declaring Extension Objects (YAML)
@@ -129,6 +146,7 @@ metadata:
   name: default-person
 spec:
   name: halo
+  slug: halo
   age: 18
 ```
 
@@ -151,29 +169,57 @@ Validation is applied on create/update automatically.
 Indexes improve query performance for `fieldSelector` and `sort`.
 
 ```java
-import java.util.HashSet;
+import java.time.Instant;
+import java.util.Set;
 import run.halo.app.extension.index.IndexSpecs;
 
 @Override
 public void start() {
     schemeManager.register(Person.class, indexSpecs -> {
-        // Single-value index (returns one value, can be null)
+        // Single-value index, can return null unless nullable(false) is configured
         indexSpecs.add(IndexSpecs.<Person, String>single("spec.name", String.class)
             .indexFunc(person -> person.getSpec().getName()));
 
-        // Multi-value index (returns Set of values)
+        // Multi-value index, returns a set of values
         indexSpecs.add(IndexSpecs.<Person, String>multi("spec.tags", String.class)
             .indexFunc(person -> {
                 var tags = person.getSpec().getTags();
-                return tags == null ? new HashSet<>() : new HashSet<>(tags);
+                return tags == null ? Set.of() : Set.copyOf(tags);
             }));
 
-        // Other supported types: Boolean, Integer, Long, Instant
+        // Index keys are not limited to String. Use Comparable types.
+        indexSpecs.add(IndexSpecs.<Person, Boolean>single("spec.pinned", Boolean.class)
+            .indexFunc(person -> person.getSpec().getPinned()));
         indexSpecs.add(IndexSpecs.<Person, Integer>single("spec.priority", Integer.class)
             .indexFunc(person -> person.getSpec().getPriority()));
+        indexSpecs.add(IndexSpecs.<Person, Instant>single("spec.publishTime", Instant.class)
+            .indexFunc(person -> person.getSpec().getPublishTime()));
+
+        // Optional builder flags from Halo 2.22+: unique and nullable.
+        indexSpecs.add(IndexSpecs.<Person, String>single("spec.slug", String.class)
+            .unique(true)
+            .nullable(false)
+            .indexFunc(person -> person.getSpec().getSlug()));
     });
 }
 ```
+
+An index spec declares an index item. Prefer building it with
+`IndexSpecs.single(name, keyType)` or `IndexSpecs.multi(name, keyType)`.
+Key details:
+
+| Property    | Description                                                                 |
+| ----------- | --------------------------------------------------------------------------- |
+| `name`      | Unique index name for this extension type, usually a field path             |
+| `keyType`   | Index key type. Must implement `Comparable`, e.g. `String`, `Boolean`, `Integer`, `Long`, `Instant` |
+| `indexFunc` | Function that extracts the indexed value from the extension                 |
+| `unique`    | Optional. Enforces unique index values when set to `true`                   |
+| `nullable`  | Optional. Allows null index values by default; set `false` for required keys |
+
+Since Halo 2.22.0, `IndexAttributeFactory.simpleAttribute()`,
+`IndexAttributeFactory.multiValueAttribute()`, and direct `new IndexSpec()`
+construction are deprecated. Use `IndexSpecs.single()` and
+`IndexSpecs.multi()` instead.
 
 Built-in indexes (do not re-declare):
 
@@ -212,23 +258,100 @@ var gvk = GroupVersionKind.fromExtension(Person.class);
 var gv = GroupVersion.parseAPIVersion("my-plugin.halo.run/v1alpha1");
 ```
 
+## Querying Extensions
+
+Prefer the newer `ReactiveExtensionClient` query methods:
+
+```java
+Flux<Person> people = client.listAll(Person.class, options, sort);
+Mono<ListResult<Person>> page = client.listBy(Person.class, options, pageable);
+```
+
+Use these methods instead of the deprecated `list(Class, Predicate, Comparator, ...)`
+overloads. Common query methods include:
+
+| Method          | Description                 |
+| --------------- | --------------------------- |
+| `listBy`        | Page through matching data  |
+| `listNamesBy`   | Page through matching names |
+| `listAll`       | Return all matching data    |
+| `listAllNames`  | Return all matching names   |
+| `listTopNames`  | Return top matching names   |
+| `countBy`       | Count matching data         |
+
+`ListOptions` carries label and field conditions:
+
+```java
+import static run.halo.app.extension.index.query.Queries.equal;
+
+ListOptions options = ListOptions.builder()
+    .labelSelector()
+    .eq("env", "production")
+    .end()
+    .fieldQuery(equal("spec.pinned", true))
+    .build();
+```
+
+Call `end()` after `labelSelector()` to return to the `ListOptions` builder.
+Use `andQuery` and `orQuery` when combining multiple field selector conditions
+inside the builder.
+
+Sorting and pagination are passed separately:
+
+```java
+import org.springframework.data.domain.Sort;
+import run.halo.app.extension.PageRequestImpl;
+
+var sort = Sort.by(Sort.Order.asc("metadata.name"));
+var pageable = PageRequestImpl.of(1, 10, sort);
+
+client.listBy(Person.class, options, pageable);
+client.listAll(Person.class, options, sort);
+```
+
+Fields used in `fieldQuery` or `Sort` must be indexed, otherwise Halo rejects
+the query as unsupported. Query values should match the index `keyType`; Halo
+uses conversion where possible, but incompatible values fail at query time.
+
 ## Query DSL (Field Selectors)
 
 Build typed queries for `ListOptions` field filtering:
 
 ```java
-import static run.halo.app.extension.index.query.QueryFactory.*;
+import static run.halo.app.extension.index.query.Queries.*;
 
 ListOptions.builder()
     .fieldQuery(and(
-        equal("spec.status", "published"),
-        contains("spec.title", keyword),
-        greaterThan("spec.priority", "10")
+        equal("spec.pinned", true),
+        contains("spec.name", keyword),
+        greaterThan("spec.priority", 10)
     ))
     .build();
 ```
 
-Available operators: `equal`, `notEqual`, `contains`, `startsWith`, `endsWith`, `greaterThan`, `lessThan`, `greaterThanOrEqual`, `lessThanOrEqual`, `between`, `in`, `isNull`, `isNotNull`, `and`, `or`, `not`, `all`.
+`QueryFactory` is deprecated since Halo 2.22.0. Use `Queries` to build query
+conditions. Negation can be built with either `Queries.not(condition)` or
+`condition.not()`.
+
+Available operators include: `empty`, `all`, `equal`, `notEqual`,
+`greaterThan(field, value)`, `greaterThan(field, value, inclusive)`,
+`lessThan(field, value)`, `lessThan(field, value, inclusive)`, `between`,
+`in`, `isNull`, `contains`, `startsWith`, `endsWith`, `and`, `or`, `not`,
+`labelExists`, `labelEqual`, `labelIn`.
+
+Use negation for operators that no longer have direct helper methods:
+
+```java
+var isNotNull = isNull("metadata.deletionTimestamp").not();
+var greaterThanOrEqual = greaterThan("spec.priority", 10, true);
+var lessThanOrEqual = lessThan("spec.priority", 20, true);
+var labelNotEqual = labelEqual("env", "production").not();
+```
+
+The HTTP `fieldSelector` parameter only supports the selector-style subset
+(`=`, `!=`, and `in`, for example `fieldSelector=spec.slug=(halo,halo2)`).
+For richer field and label conditions in Java code, use `ListOptions` with
+`Queries`.
 
 ## Extension Utilities
 

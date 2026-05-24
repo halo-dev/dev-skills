@@ -15,7 +15,7 @@ For plugin settings that users configure in the plugin detail page, define the f
 apiVersion: v1alpha1
 kind: Setting
 metadata:
-  name: my-plugin-settings  # must match spec.settingName in plugin.yaml
+  name: my-plugin-settings # must match spec.settingName in plugin.yaml
 spec:
   forms:
     - group: basic
@@ -48,33 +48,11 @@ For forms inside plugin pages (e.g. a custom admin page), use `<FormKit>` compon
 
 ```vue
 <template>
-  <FormKit
-    id="my-form"
-    type="form"
-    :actions="false"
-    @submit="handleSubmit"
-  >
-    <FormKit
-      type="text"
-      name="title"
-      label="Title"
-      validation="required"
-    />
-    <FormKit
-      type="textarea"
-      name="description"
-      label="Description"
-      :auto-height="true"
-    />
-    <FormKit
-      type="switch"
-      name="published"
-      label="Published"
-      :value="true"
-    />
-    <VButton type="primary" @click="$formkit.submit('my-form')">
-      Save
-    </VButton>
+  <FormKit id="my-form" type="form" :actions="false" @submit="handleSubmit">
+    <FormKit type="text" name="title" label="Title" validation="required" />
+    <FormKit type="textarea" name="description" label="Description" :auto-height="true" />
+    <FormKit type="switch" name="published" label="Published" :value="true" />
+    <VButton type="primary" @click="$formkit.submit('my-form')"> Save </VButton>
   </FormKit>
 </template>
 
@@ -96,19 +74,19 @@ No `import { FormKit } from "@formkit/vue"` is needed — FormKit is globally re
 
 All standard FormKit inputs work out of the box:
 
-| Input | Type | Description |
-|-------|------|-------------|
-| `text` | `string` | Single-line text |
-| `textarea` | `string` | Multi-line text (with `auto-height` addon) |
-| `email` | `string` | Email with validation |
-| `number` | `number` | Numeric input |
-| `password` | `string` | Password (Halo disables autocomplete) |
-| `date` / `datetime-local` | `string` | Date pickers |
-| `checkbox` | `boolean` / `string[]` | Single or multi checkbox |
-| `radio` | `string` | Radio group |
-| `range` | `number` | Slider |
-| `file` | `FileList` | File input |
-| `group` | `object` | Nested object container |
+| Input                     | Type                   | Description                                |
+| ------------------------- | ---------------------- | ------------------------------------------ |
+| `text`                    | `string`               | Single-line text                           |
+| `textarea`                | `string`               | Multi-line text (with `auto-height` addon) |
+| `email`                   | `string`               | Email with validation                      |
+| `number`                  | `number`               | Numeric input                              |
+| `password`                | `string`               | Password (Halo disables autocomplete)      |
+| `date` / `datetime-local` | `string`               | Date pickers                               |
+| `checkbox`                | `boolean` / `string[]` | Single or multi checkbox                   |
+| `radio`                   | `string`               | Radio group                                |
+| `range`                   | `number`               | Slider                                     |
+| `file`                    | `FileList`             | File input                                 |
+| `group`                   | `object`               | Nested object container                    |
 
 ### Halo Custom Inputs
 
@@ -204,7 +182,7 @@ Based on [Iconify](https://iconify.design/).
 - $formkit: iconify
   name: social_icon
   label: Social Icon
-  format: svg  # svg | dataurl | url | name
+  format: svg # svg | dataurl | url | name
 ```
 
 With sizing options:
@@ -313,21 +291,21 @@ Wraps a group of fields and validates them against a remote endpoint.
 
 Halo provides dedicated selectors for core CMS entities. All return the resource's `metadata.name`.
 
-| Input | Description | Multi-select |
-|-------|-------------|--------------|
-| `menuSelect` | Navigation menu selector | Yes |
-| `menuCheckbox` | Menu checkbox group | Yes (array) |
-| `menuRadio` | Menu radio selection | No |
-| `postSelect` | Post selector | No |
-| `singlePageSelect` | Single page selector | No |
-| `categorySelect` | Category selector | No |
-| `categoryCheckbox` | Category checkbox | Yes (array) |
-| `tagSelect` | Tag selector | No |
-| `tagCheckbox` | Tag checkbox | Yes (array) |
-| `userSelect` | User selector | Yes |
-| `roleSelect` | Role selector | Yes |
-| `attachmentGroupSelect` | Attachment group selector | Yes |
-| `attachmentPolicySelect` | Attachment policy selector | Yes |
+| Input                    | Description                | Multi-select |
+| ------------------------ | -------------------------- | ------------ |
+| `menuSelect`             | Navigation menu selector   | Yes          |
+| `menuCheckbox`           | Menu checkbox group        | Yes (array)  |
+| `menuRadio`              | Menu radio selection       | No           |
+| `postSelect`             | Post selector              | No           |
+| `singlePageSelect`       | Single page selector       | No           |
+| `categorySelect`         | Category selector          | No           |
+| `categoryCheckbox`       | Category checkbox          | Yes (array)  |
+| `tagSelect`              | Tag selector               | No           |
+| `tagCheckbox`            | Tag checkbox               | Yes (array)  |
+| `userSelect`             | User selector              | Yes          |
+| `roleSelect`             | Role selector              | Yes          |
+| `attachmentGroupSelect`  | Attachment group selector  | Yes          |
+| `attachmentPolicySelect` | Attachment policy selector | Yes          |
 
 Example:
 
@@ -432,12 +410,12 @@ Use `if` in Schema to conditionally show fields:
 
 ## Schema vs Vue Component: When to Use Which
 
-| Scenario | Approach |
-|----------|----------|
-| Plugin settings (config page) | `Setting` resource with Schema |
-| Custom admin page with dynamic logic | Vue `<FormKit>` components |
-| Simple CRUD form in a modal | Vue `<FormKit>` components |
-| Reusable form across plugins | Vue `<FormKit>` components in a shared package |
+| Scenario                             | Approach                                       |
+| ------------------------------------ | ---------------------------------------------- |
+| Plugin settings (config page)        | `Setting` resource with Schema                 |
+| Custom admin page with dynamic logic | Vue `<FormKit>` components                     |
+| Simple CRUD form in a modal          | Vue `<FormKit>` components                     |
+| Reusable form across plugins         | Vue `<FormKit>` components in a shared package |
 
 ## Important Notes
 

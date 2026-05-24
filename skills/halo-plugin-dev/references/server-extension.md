@@ -208,13 +208,13 @@ An index spec declares an index item. Prefer building it with
 `IndexSpecs.single(name, keyType)` or `IndexSpecs.multi(name, keyType)`.
 Key details:
 
-| Property    | Description                                                                 |
-| ----------- | --------------------------------------------------------------------------- |
-| `name`      | Unique index name for this extension type, usually a field path             |
+| Property    | Description                                                                                         |
+| ----------- | --------------------------------------------------------------------------------------------------- |
+| `name`      | Unique index name for this extension type, usually a field path                                     |
 | `keyType`   | Index key type. Must implement `Comparable`, e.g. `String`, `Boolean`, `Integer`, `Long`, `Instant` |
-| `indexFunc` | Function that extracts the indexed value from the extension                 |
-| `unique`    | Optional. Enforces unique index values when set to `true`                   |
-| `nullable`  | Optional. Allows null index values by default; set `false` for required keys |
+| `indexFunc` | Function that extracts the indexed value from the extension                                         |
+| `unique`    | Optional. Enforces unique index values when set to `true`                                           |
+| `nullable`  | Optional. Allows null index values by default; set `false` for required keys                        |
 
 Since Halo 2.22.0, `IndexAttributeFactory.simpleAttribute()`,
 `IndexAttributeFactory.multiValueAttribute()`, and direct `new IndexSpec()`
@@ -270,14 +270,14 @@ Mono<ListResult<Person>> page = client.listBy(Person.class, options, pageable);
 Use these methods instead of the deprecated `list(Class, Predicate, Comparator, ...)`
 overloads. Common query methods include:
 
-| Method          | Description                 |
-| --------------- | --------------------------- |
-| `listBy`        | Page through matching data  |
-| `listNamesBy`   | Page through matching names |
-| `listAll`       | Return all matching data    |
-| `listAllNames`  | Return all matching names   |
-| `listTopNames`  | Return top matching names   |
-| `countBy`       | Count matching data         |
+| Method         | Description                 |
+| -------------- | --------------------------- |
+| `listBy`       | Page through matching data  |
+| `listNamesBy`  | Page through matching names |
+| `listAll`      | Return all matching data    |
+| `listAllNames` | Return all matching names   |
+| `listTopNames` | Return top matching names   |
+| `countBy`      | Count matching data         |
 
 `ListOptions` carries label and field conditions:
 

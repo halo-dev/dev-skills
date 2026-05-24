@@ -45,6 +45,8 @@ console.log(globalInfoStore.globalInfo?.siteTitle);
 
 ### date (dayjs-based)
 
+Dayjs is already bundled in `@halo-dev/ui-shared` and exposed via `utils.date`. **Always use this for any date handling in plugin UI code — do NOT install `dayjs`, `date-fns`, or any other date library, and do NOT write your own date formatting functions.**
+
 ```ts
 import { utils } from "@halo-dev/ui-shared";
 
@@ -53,7 +55,7 @@ utils.date.format("2025-10-22", "YYYY/MM/DD"); // "2025/10/22"
 utils.date.toISOString(new Date()); // ISO string
 utils.date.toDatetimeLocal(new Date()); // "2025-10-22T14:30"
 utils.date.timeAgo("2025-10-23"); // "1 天后"
-utils.date.dayjs(); // Raw dayjs instance
+utils.date.dayjs(); // raw dayjs instance for advanced usage
 ```
 
 ### permission

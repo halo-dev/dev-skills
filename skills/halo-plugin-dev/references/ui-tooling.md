@@ -20,15 +20,15 @@ pnpm add -D unplugin-icons @iconify/json
 
 ```ts
 // ui/vite.config.ts
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import Icons from 'unplugin-icons/vite';
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import Icons from "unplugin-icons/vite";
 
 export default defineConfig({
   plugins: [
     vue(),
     Icons({
-      compiler: 'vue3',
+      compiler: "vue3",
       autoInstall: true,
     }),
   ],
@@ -39,17 +39,15 @@ export default defineConfig({
 
 ```ts
 // ui/rsbuild.config.mjs
-import { defineConfig } from '@rsbuild/core';
-import { pluginVue } from '@rsbuild/plugin-vue';
-import Icons from 'unplugin-icons/rspack';
+import { defineConfig } from "@rsbuild/core";
+import { pluginVue } from "@rsbuild/plugin-vue";
+import Icons from "unplugin-icons/rspack";
 
 export default defineConfig({
   plugins: [pluginVue()],
   tools: {
     rspack: {
-      plugins: [
-        Icons({ compiler: 'vue3' }),
-      ],
+      plugins: [Icons({ compiler: "vue3" })],
     },
   },
 });
@@ -77,7 +75,7 @@ import MdiHome from '~icons/mdi/home';
 
 ```vue
 <script setup lang="ts">
-import RiImage2Line from '~icons/ri/image-2-line';
+import RiImage2Line from "~icons/ri/image-2-line";
 </script>
 
 <template>
@@ -103,15 +101,12 @@ pnpm add -D unocss @unocss/webpack
 
 ```ts
 // ui/vite.config.ts
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import UnoCSS from 'unocss/vite';
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import UnoCSS from "unocss/vite";
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    UnoCSS(),
-  ],
+  plugins: [vue(), UnoCSS()],
 });
 ```
 
@@ -119,24 +114,22 @@ Add the CSS import in your entry file:
 
 ```ts
 // ui/src/index.ts
-import 'uno.css';
+import "uno.css";
 ```
 
 ### Rsbuild Configuration
 
 ```ts
 // ui/rsbuild.config.mjs
-import { defineConfig } from '@rsbuild/core';
-import { pluginVue } from '@rsbuild/plugin-vue';
-import { UnoCSSRspackPlugin } from '@unocss/webpack/rspack';
+import { defineConfig } from "@rsbuild/core";
+import { pluginVue } from "@rsbuild/plugin-vue";
+import { UnoCSSRspackPlugin } from "@unocss/webpack/rspack";
 
 export default defineConfig({
   plugins: [pluginVue()],
   tools: {
     rspack: {
-      plugins: [
-        UnoCSSRspackPlugin(),
-      ],
+      plugins: [UnoCSSRspackPlugin()],
     },
   },
 });
@@ -146,7 +139,7 @@ Add the CSS import:
 
 ```ts
 // ui/src/index.ts
-import 'uno.css';
+import "uno.css";
 ```
 
 ### Configuration File
@@ -154,7 +147,7 @@ import 'uno.css';
 Create `ui/uno.config.ts`:
 
 ```ts
-import { defineConfig, presetWind3, transformerCompileClass } from 'unocss';
+import { defineConfig, presetWind3, transformerCompileClass } from "unocss";
 
 export default defineConfig({
   presets: [presetWind3()],

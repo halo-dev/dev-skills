@@ -28,6 +28,36 @@ Halo exposes several core beans that any plugin can inject via constructor injec
 > - [SortResolver](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/core/extension/endpoint/SortResolver.java)
 > - [AnonymousUserConst](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/infra/AnonymousUserConst.java)
 
+## Docs Routing
+
+This file lists frequently used beans, not every injectable type in Halo. For
+method signatures and newer APIs, verify against the official docs or source
+before coding.
+
+| Need                                      | Official docs                                                                                                                              |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| ExtensionClient / ReactiveExtensionClient | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/extension-client.md       |
+| ExtensionGetter and extension points      | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/extension-getter.md       |
+| SettingFetcher / ReactiveSettingFetcher   | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/setting-fetcher.md        |
+| Notifications                             | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/notification.md           |
+| Reverse proxy helpers                     | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/reverseproxy.md           |
+| WebSocket helpers                         | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/websocket.md              |
+| Login handler enhancement                 | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/login-handler-enhancer.md |
+| Template and finder helpers for themes    | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/template-for-theme.md     |
+
+When working from a local docs checkout, use the same paths under
+`docs/developer-guide/...`; versioned docs live under
+`versioned_docs/version-2.25/...`.
+
+## Quick Index
+
+- Custom model CRUD: [ReactiveExtensionClient](#reactiveextensionclient)
+- Blocking model CRUD: [ExtensionClient](#extensionclient)
+- Extension point lookup: [ExtensionGetter](#extensiongetter)
+- Plugin settings: [SettingFetcher / ReactiveSettingFetcher](#settingfetcher--reactivesettingfetcher)
+- Notifications: [Notifications](#notifications)
+- JSON helpers: [JsonUtils](#jsonutils)
+
 ## ReactiveExtensionClient
 
 Reactive CRUD for custom extensions.

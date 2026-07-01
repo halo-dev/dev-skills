@@ -4,6 +4,35 @@ Halo uses [FormKit](https://formkit.com/) as its form solution. FormKit is **glo
 
 > **Critical**: Do NOT build custom form components from scratch (e.g. raw `<input>` elements) in plugin pages. Always use FormKit inputs so your UI stays consistent with the rest of Halo.
 
+## Docs Routing
+
+FormKit integration changes across Halo versions. Treat this file as a plugin
+working guide, then verify exact input options in the official docs when using a
+recent or version-sensitive field.
+
+| Need                                     | Official docs                                                                                                                    |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Core form schema and built-in inputs     | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/form-schema.md                              |
+| Plugin custom FormKit inputs             | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/formkit.md          |
+| Plugin UI entry shape (`formkit.inputs`) | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/basics/ui/entry.md                   |
+| Plugin API changelog for version gates   | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-changelog.md                     |
+| Business form components and directives  | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/index.md |
+| Annotation forms for extension metadata  | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/annotations-form.md                         |
+
+When working from a local docs checkout, use the same paths under
+`docs/developer-guide/...`; versioned docs live under
+`versioned_docs/version-2.25/...`.
+
+## Quick Index
+
+- Plugin setting forms: [Setting Schema](#1-setting-schema-plugin-config)
+- Direct plugin page forms: [Vue Component](#2-vue-component-direct-formkit)
+- Built-in and Halo custom inputs: [Available Inputs](#available-inputs)
+- Version-sensitive fields: [Version Notes](#version-notes)
+- Validation and schema patterns: [Validation](#validation)
+- Submission patterns:
+  [Programmatic Form Submission](#programmatic-form-submission)
+
 ## Two Ways to Use Forms
 
 ### 1. Setting Schema (Plugin Config)
@@ -362,6 +391,13 @@ through `definePlugin({ formkit: { inputs } })`. See [ui-entry.md](ui-entry.md#c
 Use these only when built-in FormKit and Halo inputs cannot express the
 interaction. Prefix names with the plugin identifier to avoid collisions, for
 example `myPluginTokenPicker`.
+
+## Version Notes
+
+- Halo 2.25+ supports `select` option `icon` / `description`, remote
+  `iconField` / `descriptionField`, and plugin-registered custom FormKit inputs.
+- When using 2.25-only FormKit features, raise `spec.requires` in `plugin.yaml`
+  and keep related UI packages on a compatible version.
 
 ## Programmatic Form Submission
 

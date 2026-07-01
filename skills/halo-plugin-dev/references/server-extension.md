@@ -17,6 +17,32 @@ Halo uses a Kubernetes CRD-like system called **Extension** for custom data stor
 > - [MetadataUtil](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/MetadataUtil.java)
 > - [ExtensionOperator](https://github.com/halo-dev/halo/blob/main/api/src/main/java/run/halo/app/extension/ExtensionOperator.java)
 
+## Docs Routing
+
+This file captures the common model pattern. Verify exact APIs, query helpers,
+and reconciler contracts in the official docs before depending on a recent
+method or version-specific behavior.
+
+| Need                                      | Official docs                                                                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Extension model, indexes, query params    | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/extension.md        |
+| ExtensionClient / ReactiveExtensionClient | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/extension-client.md |
+| Object management basics                  | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/basics/server/object-management.md       |
+| Reconciler controllers                    | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/server/reconciler.md       |
+| Plugin API changelog for version gates    | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-changelog.md                         |
+
+When working from a local docs checkout, use the same paths under
+`docs/developer-guide/...`; versioned docs live under
+`versioned_docs/version-2.25/...`.
+
+## Quick Index
+
+- Basic model shape: [Creating an Extension](#creating-an-extension)
+- Registration: [Registering in Lifecycle](#registering-in-lifecycle)
+- Generated endpoints: [Auto-Generated CRUD APIs](#auto-generated-crud-apis)
+- Indexes and queries: [Indexes](#indexes)
+- Query APIs: [Querying Extensions](#querying-extensions)
+
 ## Creating an Extension
 
 Three steps:

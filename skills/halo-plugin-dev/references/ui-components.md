@@ -9,6 +9,27 @@ Halo provides two layers of UI primitives for plugin frontends:
 >
 > For forms, see [ui-forms.md](ui-forms.md) — Halo uses FormKit (globally registered) with many custom inputs.
 
+## Official Docs Routing
+
+Component APIs change across Halo versions. Treat the lists below as common
+shortcuts, not an exhaustive API reference.
+
+| Need                                        | Official docs                                                                                                                                        |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Base components from `@halo-dev/components` | https://halo-ui-components.pages.dev                                                                                                                 |
+| Business component index                    | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/index.md                     |
+| `AttachmentSelectorModal`                   | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/attachment-selector-modal.md |
+| `AttachmentFileTypeIcon`                    | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/attachment-file-type-icon.md |
+| `AnnotationsForm`                           | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/annotations-form.md          |
+| `FilterDropdown` / `FilterCleanButton`      | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/filter-dropdown.md           |
+| `HasPermission`                             | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/has-permission.md            |
+| `PluginDetailModal`                         | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/plugin-detail-modal.md       |
+| `SearchInput`                               | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/search-input.md              |
+| `UppyUpload`                                | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/uppy-upload.md               |
+| `VCodemirror`                               | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/v-codemirror.md              |
+| `v-permission`                              | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/v-permission.md              |
+| `v-tooltip`                                 | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/v-tooltip.md                 |
+
 ## Base Component Library
 
 Install:
@@ -34,7 +55,7 @@ const visible = ref(false);
 </template>
 ```
 
-Actual exported components from `@halo-dev/components`:
+Common exported components from `@halo-dev/components`:
 
 | Component                                       | Purpose                                                                    |
 | ----------------------------------------------- | -------------------------------------------------------------------------- |
@@ -138,6 +159,14 @@ Search input that only triggers on Enter (not while typing).
 <SearchInput v-model="keyword" placeholder="Search..." />
 ```
 
+### AttachmentFileTypeIcon
+
+File-type icon for attachment/file lists.
+
+```vue
+<AttachmentFileTypeIcon fileName="example.png" :display-ext="true" />
+```
+
 ### AnnotationsForm
 
 Renders the Annotations form for a given Extension group/kind.
@@ -192,6 +221,16 @@ Open a plugin's detail/settings modal inline.
 | ------ | -------- | -------------------- |
 | `name` | `string` | Plugin metadata.name |
 
+### HasPermission
+
+Render content only when the user has the required permissions.
+
+```vue
+<HasPermission :permissions="['system:posts:manage']">
+  <VButton type="danger">Delete</VButton>
+</HasPermission>
+```
+
 ## Directives (Globally Registered)
 
 ### v-permission
@@ -202,7 +241,7 @@ Conditionally render based on permissions.
 <VButton type="danger" v-permission="['system:posts:manage']">Delete</VButton>
 ```
 
-Equivalent component: `<HasPermission :permissions="["..."]">...</HasPermission>`
+Equivalent component: `<HasPermission :permissions="['system:posts:manage']">...</HasPermission>`
 
 ### v-tooltip
 

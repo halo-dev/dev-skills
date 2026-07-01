@@ -105,6 +105,8 @@ Custom select with static or remote data source, multi-select, sorting, and sear
   options:
     - label: China
       value: cn
+      icon: /assets/flags/cn.svg
+      description: Chinese cuisine with rich regional styles
     - label: USA
       value: us
 ```
@@ -121,9 +123,15 @@ Remote data source:
     method: GET
     labelField: post.spec.title
     valueField: post.metadata.name
+    iconField: post.spec.cover
+    descriptionField: post.status.excerpt
 ```
 
 Key props: `options`, `action`, `requestOption`, `multiple`, `searchable`, `clearable`, `sortable`, `maxCount`.
+
+Halo 2.25+ supports `icon` and `description` in static options, plus
+`requestOption.iconField` and `requestOption.descriptionField` for remote
+options.
 
 #### `switch` — Toggle Switch
 
@@ -329,6 +337,7 @@ For selecting a Halo Secret resource (stores sensitive data like API keys).
 - $formkit: secret
   name: apiSecret
   label: API Secret
+  descriptionPreset: "Token for My Plugin"
   requiredKeys:
     - key: apiKey
       help: API Key
@@ -344,6 +353,15 @@ For selecting a Halo Secret resource (stores sensitive data like API keys).
   label: Theme Color
   value: "#1890ff"
 ```
+
+## Custom Inputs from Plugin UI
+
+Halo 2.25+ lets a plugin register custom FormKit inputs from `ui/src/index.ts`
+through `definePlugin({ formkit: { inputs } })`. See [ui-entry.md](ui-entry.md#custom-formkit-inputs).
+
+Use these only when built-in FormKit and Halo inputs cannot express the
+interaction. Prefix names with the plugin identifier to avoid collisions, for
+example `myPluginTokenPicker`.
 
 ## Programmatic Form Submission
 

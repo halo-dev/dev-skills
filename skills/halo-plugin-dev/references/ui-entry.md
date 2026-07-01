@@ -57,6 +57,11 @@ export default definePlugin({
   extensionPoints: {
     // UI extension point implementations
   },
+  formkit: {
+    inputs: {
+      // Custom FormKit inputs (Halo 2.25+)
+    },
+  },
 });
 ```
 
@@ -143,3 +148,29 @@ meta: {
 ```
 
 The route is hidden if the user lacks any of the listed permissions.
+
+## Custom FormKit Inputs
+
+Halo 2.25+ lets plugin UI entries register custom FormKit inputs for use in
+plugin-provided FormKit Schema.
+
+```ts
+import { createInput } from "@formkit/vue";
+import { definePlugin } from "@halo-dev/ui-shared";
+import { defineAsyncComponent } from "vue";
+
+export default definePlugin({
+  formkit: {
+    inputs: {
+      myPluginInput: createInput(
+        defineAsyncComponent(() => import("./components/MyPluginInput.vue")),
+      ),
+    },
+  },
+});
+```
+
+Use a plugin-prefixed input name to avoid collisions with Halo built-ins or
+earlier-loaded plugins. If the input definition uses `@formkit/vue`, require
+`@halo-dev/ui-plugin-bundler-kit@2.25.0+` and set `plugin.yaml` `spec.requires`
+to `>=2.25.0`.

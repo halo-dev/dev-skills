@@ -4,9 +4,11 @@ description: >
   Use when creating or modifying a Halo CMS plugin: writing Java backend code,
   configuring plugin.yaml, defining custom extensions (GVK), creating custom APIs
   (CustomEndpoint, MVC controllers), building Vue-based UI with @halo-dev/ui-shared,
-  setting up Gradle builds with DevTools, defining RBAC role templates, registering
-  custom FormKit inputs, generating API clients from OpenAPI, registering theme-side
-  Finder APIs, or handling plugin lifecycle (start/stop/delete).
+  setting up Gradle builds with DevTools, defining RBAC role templates, declaring
+  pluginDependencies, exposing or consuming plugin extension points, publishing
+  shared events, registering custom FormKit inputs, generating API clients from
+  OpenAPI, registering theme-side Finder APIs, or handling plugin lifecycle
+  (start/stop/delete).
 ---
 
 # Halo Plugin Development
@@ -67,6 +69,7 @@ Or use `watch` for auto-reload:
 | [references/api-changelog.md](references/api-changelog.md)                 | High-impact plugin API changes by Halo version, with docs routes                                  | Before using version-sensitive APIs, upgrading Halo dependencies, or raising `spec.requires`                                              |
 | [references/plugin-structure.md](references/plugin-structure.md)           | Directory structure, backend/frontend layout, build.gradle basics                                 | Creating a new plugin from scratch or understanding the directory layout                                                                  |
 | [references/plugin-manifest.md](references/plugin-manifest.md)             | plugin.yaml fields, version requirements, dependencies, settings/configMap                        | Writing or editing plugin.yaml                                                                                                            |
+| [references/plugin-interaction.md](references/plugin-interaction.md)       | pluginDependencies, API modules, shared events, defining and consuming plugin extension points    | Depending on another plugin, exposing an API module, sharing events, or making a plugin extensible                                        |
 | [references/devtools.md](references/devtools.md)                           | haloServer, reload, watch, generateApiClient, generateRoleTasks, debug config                     | Running `./gradlew haloServer`, hot reload, or debugging a plugin                                                                         |
 | [references/server-extension.md](references/server-extension.md)           | Custom Extension (GVK), AbstractExtension, CRUD APIs, indexes, field/label selectors              | Defining a custom data model, storage, or query indexes                                                                                   |
 | [references/server-api.md](references/server-api.md)                       | CustomEndpoint, @Controller with @ApiVersion, query params, validation, OpenAPI docs              | Writing a new backend API endpoint or controller                                                                                          |

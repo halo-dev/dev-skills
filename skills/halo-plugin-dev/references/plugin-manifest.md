@@ -48,6 +48,9 @@ spec:
 
 ## Plugin Dependencies
 
+For dependency design, optional dependencies, and API modules, see
+[plugin-interaction.md](plugin-interaction.md).
+
 ```yaml
 spec:
   pluginDependencies:

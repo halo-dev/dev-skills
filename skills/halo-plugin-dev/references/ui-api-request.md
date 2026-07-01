@@ -24,6 +24,27 @@ import {
 } from "@halo-dev/api-client";
 ```
 
+## Error Handling
+
+Halo adds global response interceptors to the shared Axios instance used by `@halo-dev/api-client`. Request failures from `coreApiClient`, `consoleApiClient`, `ucApiClient`, `publicApiClient`, generated clients constructed with `axiosInstance`, or direct `axiosInstance` calls already show Halo-managed error toasts.
+
+- Do not add local `try/catch`, `catch`, or `useMutation.onError` handlers that call `Toast.error` / `Toast.warning` for those Axios request failures. Doing so can show duplicate toasts.
+- Keep local toasts for non-Axios errors such as client-side validation, parsing failures, missing local prerequisites, or domain-specific messages created before a request is sent.
+- If a handler must run cleanup or custom logic after a failed request, guard Axios errors with `isAxiosError` and do not toast them locally.
+
+```ts
+import { Toast } from "@halo-dev/components";
+import { isAxiosError } from "axios";
+
+function toastNonAxiosError(error: unknown) {
+  if (isAxiosError(error)) {
+    return;
+  }
+
+  Toast.error(error instanceof Error ? error.message : "Operation failed");
+}
+```
+
 ### coreApiClient (Extension CRUD)
 
 ```ts

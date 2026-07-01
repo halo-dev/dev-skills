@@ -18,11 +18,16 @@ my-theme/
 │   ├── tag.html              # Tag archive
 │   ├── categories.html       # Category listing
 │   └── category.html         # Category archive
+├── screenshot.png            # Optional Console preview image (Halo 2.25+)
 ├── theme.yaml                # Theme configuration (required)
 └── settings.yaml             # Theme settings form definition (optional)
 ```
 
 > **Important**: The theme folder name must match the `metadata.name` field in `theme.yaml`; otherwise some assets may fail to load.
+
+Halo 2.25+ recognizes the first readable root preview image in this order:
+`screenshot.png`, `screenshot.jpeg`, `screenshot.jpg`, `screenshot.webp`. The
+resolved URL is exposed as `Theme.status.screenshot`.
 
 ## theme.yaml
 
@@ -207,6 +212,19 @@ Additional input components provided by Halo on top of FormKit:
 | `verificationForm` | Remote verification form group                                      |
 
 Full parameter reference: https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/form-schema.md
+
+Version-sensitive FormKit notes:
+
+- Halo 2.25+: `select` option objects support `icon` and `description`; remote
+  select data can map those fields via `requestOption.iconField` and
+  `requestOption.descriptionField`.
+- Halo 2.25+: `secret` supports `descriptionPreset`.
+- Halo 2.23+: `iconify` supports optional `sizing`.
+- Halo 2.22.8+: `toggle` is available.
+- Halo 2.22.2+: `switch` is available.
+- Halo 2.22+: prefer `array` over `repeater`; the newer `attachment` supports
+  preview/direct upload/library selection, while the older library-only picker
+  is `attachmentInput`.
 
 ### FormKit Schema Gotchas
 

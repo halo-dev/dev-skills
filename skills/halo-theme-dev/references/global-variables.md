@@ -121,9 +121,31 @@ Returns the full path to a static asset for use in non-attribute contexts (e.g. 
 
 ---
 
+## `#halo.matchVersion(constraint)` — Halo version guard
+
+Halo 2.25+ exposes `#halo.matchVersion(constraint)` for conditional rendering
+based on semantic version ranges. Use it when only a small fragment needs a
+newer Halo feature and raising the whole theme's `spec.requires` would be too
+broad.
+
+```html
+<div th:if="${#halo.matchVersion('>=2.25.0')}">
+  <!-- Use Halo 2.25+ only markup here -->
+</div>
+
+<div th:if="${#halo.matchVersion('>=2.25.0 & <3.0.0')}">
+  <!-- Limit rendering to a Halo 2.x range -->
+</div>
+```
+
+Development builds with version `0.0.0` always match, which keeps local theme
+debugging convenient.
+
+---
+
 ## Online Docs
 
-> **If you need the exact structure of `site`, `theme`, or `theme.config`, fetch the doc below — do not guess field names from training data.**
+> **If you need the exact structure of `site`, `theme`, `theme.config`, or `#halo` helpers, fetch the doc below — do not guess field names from training data.**
 
 https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/theme/global-variables.md
 

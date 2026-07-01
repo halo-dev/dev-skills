@@ -34,6 +34,9 @@ Use `th:with` to bind the result in the current scope:
 ## Common Notes
 
 - `postFinder.list({...})` is the recommended unified query method (all parameters are optional); it supersedes the deprecated `list(page, size)`, `listByCategory(...)`, etc.
+- Halo 2.25+ adds `postFinder.cursorByCategory(postName)` for previous/next posts inside the current post's primary category. It only matches the same category and does not include child categories.
+- Halo 2.24.1+ adds `postFinder.random(maxSize)` for random published posts.
+- Halo 2.22+ changed `postFinder.cursor(postName)`: the result no longer has `current`; `previous` and `next` are `ListedPostVo`.
 - `metadata.name` is the unique resource identifier — it is not the display name (`displayName`/`title`).
 - Pair `settings.yaml` `categorySelect`/`tagSelect` inputs with Finder queries so users can configure query parameters in Console instead of hard-coding them in templates.
 

@@ -5,7 +5,7 @@ Halo provides two layers of UI primitives for plugin frontends:
 1. **Base component library** (`@halo-dev/components`) — install and import explicitly
 2. **Business components & directives** — globally registered, use directly without import
 
-> Full base component docs: https://halo-ui-components.pages.dev
+> Full base component docs: https://halo-ui-components.halo-run.workers.dev
 >
 > For forms, see [ui-forms.md](ui-forms.md) — Halo uses FormKit (globally registered) with many custom inputs.
 
@@ -16,7 +16,7 @@ shortcuts, not an exhaustive API reference.
 
 | Need                                        | Official docs                                                                                                                                        |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Base components from `@halo-dev/components` | https://halo-ui-components.pages.dev                                                                                                                 |
+| Base components from `@halo-dev/components` | https://halo-ui-components.halo-run.workers.dev                                                                                                      |
 | Business component index                    | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/index.md                     |
 | `AttachmentSelectorModal`                   | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/attachment-selector-modal.md |
 | `AttachmentFileTypeIcon`                    | https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-reference/ui/components/attachment-file-type-icon.md |

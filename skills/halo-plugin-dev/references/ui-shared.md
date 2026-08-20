@@ -6,6 +6,28 @@ Available from Halo 2.22. Requires plugin `spec.requires: ">=2.22.0"`.
 
 Install Pinia: `pnpm install pinia`
 
+### uiPlugins (Halo 2.26+)
+
+Use this store to inspect whether a plugin or activated-theme UI provider was
+discovered and whether it registered successfully:
+
+```ts
+import { stores } from "@halo-dev/ui-shared";
+import { computed } from "vue";
+
+const uiPlugins = stores.uiPlugins();
+
+uiPlugins.isEnabled("plugin-search");
+const registered = computed(() => uiPlugins.isRegistered("plugin-search"));
+const registration = uiPlugins.get("plugin-search");
+```
+
+Theme provider names use `theme:{metadata.name}`. The registration records are
+read-only. Do not mutate them, depend on provider load order, or use the store to
+import or invoke another provider's implementation. Replace checks for IIFE
+globals such as `window.PluginName` or `window.enabledUiPlugins` with
+`isEnabled()` when targeting Halo 2.26+.
+
 ### currentUser
 
 ```ts

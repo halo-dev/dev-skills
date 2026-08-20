@@ -20,7 +20,6 @@ my-halo-plugin/
 │   │       └── MyPlugin.java        # Entry class extending BasePlugin
 │   └── resources/
 │       ├── plugin.yaml              # Plugin manifest (required)
-│       ├── console/                 # Built frontend output (main.js + style.css)
 │       ├── extensions/              # YAML extension declarations
 │       ├── templates/               # Thymeleaf templates (optional, for theme integration)
 │       └── static/                  # Static assets served at /plugins/{name}/assets (optional)
@@ -37,10 +36,11 @@ my-halo-plugin/
 - **Spring features supported**: Core IoC, WebFlux reactive stack, Testing. Standard annotations: `@Component`, `@Service`, `@Repository`, `@Configuration`, `@Controller`, etc.
 - **Resources**: `src/main/resources/plugin.yaml` is mandatory. `src/main/resources/extensions/` holds YAML declarations for custom extensions, role templates, settings, etc.
 
-## Frontend (`ui/` or `console/`)
+## Frontend (`ui/`)
 
-- **Entry file**: `ui/src/index.ts` (or `console/src/index.ts`) exports a default object created by `definePlugin()`.
-- **Build output**: compiled to `src/main/resources/console/main.js` + `style.css`. Halo merges all plugin JS/CSS into global bundles.
+- **Entry file**: `ui/src/index.ts` normally exports a default object created by `definePlugin()`.
+- **Production output**: generated under `ui/build/dist`, then copied as a complete directory to `build/resources/main/ui` for JAR packaging.
+- **Format**: Halo 2.26+ supports ESM providers with `ui-plugin.json`, hashed entries, styles, and async chunks; older targets use the compatible IIFE format.
 - **Build tools**: Vite or Rsbuild via `@halo-dev/ui-plugin-bundler-kit`.
 
-> From Halo 2.11+, UC (User Center) shares the same plugin mechanism. `resources/console` may be renamed to `resources/ui` in future but both are compatible.
+> From Halo 2.11+, UC (User Center) shares the same plugin mechanism. Halo 2.x still reads the legacy `resources/console` directory, but new projects should use `resources/ui`. Do not assume an ESM provider consists only of `main.js` and `style.css`; package the complete generated directory.

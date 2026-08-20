@@ -4,11 +4,11 @@
 
 ## 什么是 Agent Skills？
 
-Agent Skills 是结构化的知识包，为 AI Agent（如 Cursor、Codex 等）提供特定领域的深度上下文。每个 skill 包含：
+Agent Skills 是结构化的知识包，为 AI Agent（如 Cursor、Codex 等）提供特定领域的深度上下文。根据工作流需要，skill 可以包含：
 
 - `SKILL.md` 入口文件，包含快速参考和开发工作流指南
 - `references/` 目录，存放聚焦、简洁的参考文档
-- `assets/` 目录，提供开箱即用的起始模板
+- 可选的 `assets/` 目录，提供开箱即用的起始模板
 
 ## 安装
 
@@ -36,6 +36,7 @@ npx skills add halo-dev/dev-skills@halo-plugin-dev
 - Thymeleaf layout fragment 与模板路由
 - 模板变量与 Finder API 使用
 - 静态资源管理及通过 [`vite-plugin-halo-theme`](https://github.com/halo-sigs/vite-plugin-halo-theme) 进行 Vite 集成
+- Halo 2.26+ 页面布局集成及可选的 Console/UC 主题 UI provider
 - 使用 FormKit Schema 构建主题设置表单
 - 模型元数据（Annotations）——定义与读取自定义字段
 - 自定义模板标签（`halo:comment`、`halo:footer`）
@@ -58,7 +59,7 @@ npx skills add halo-dev/dev-skills@halo-plugin-dev
 - 插件生命周期（`BasePlugin` start/stop/delete）及 `SchemeManager` 注册与清理
 - RBAC 角色模板，包含 view/manage 角色及匿名用户聚合
 - Vue 3 前端：`definePlugin`、Console 和 User Center 路由注册
-- 通过 `@halo-dev/ui-plugin-bundler-kit`（Vite/Rsbuild）构建前端
+- 通过 `@halo-dev/ui-plugin-bundler-kit`（Vite/Rsbuild）构建和打包 IIFE/ESM UI provider
 - 通过 `@Finder` 注解实现主题端 Thymeleaf 模板变量集成
 - DevTools 工作流（`haloServer`、`reload`、`watch`）及 OpenAPI 客户端生成
 
@@ -68,10 +69,9 @@ npx skills add halo-dev/dev-skills@halo-plugin-dev
 skills/
 └── <skill-name>/
     ├── SKILL.md          # 入口文件，优先阅读
-    ├── agents/
-    │   └── openai.yaml   # Skill 元信息
-    ├── references/       # 参考文档
-    └── assets/           # 起始模板与示例
+    ├── agents/           # 可选的 UI 元信息和调用策略
+    ├── references/       # 可选的参考文档
+    └── assets/           # 可选的起始模板与输出资源
 ```
 
 ## 贡献

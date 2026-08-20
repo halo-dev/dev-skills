@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform('run.halo.tools.platform:plugin:2.22.0')
+    implementation platform('run.halo.tools.platform:plugin:2.26.0')
     compileOnly 'run.halo.app:api'
 
     testImplementation 'run.halo.app:api'
@@ -58,7 +58,7 @@ tasks.withType(JavaCompile).configureEach {
 // UI build integration (if UI is in a separate subproject)
 tasks.register('processUiResources', Copy) {
     from project(':ui').layout.buildDirectory.dir('dist')
-    into layout.buildDirectory.dir('resources/main/console')
+    into layout.buildDirectory.dir('resources/main/ui')
     dependsOn project(':ui').tasks.named('assemble')
     shouldRunAfter tasks.named('processResources')
 }
@@ -68,7 +68,7 @@ tasks.named('classes') {
 }
 
 halo {
-    version = '2.22'
+    version = '2.26'
     superAdminUsername = 'admin'
     superAdminPassword = 'admin'
     port = 8090

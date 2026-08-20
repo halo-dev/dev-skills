@@ -1,14 +1,10 @@
 ---
 name: halo-plugin-dev
 description: >
-  Use when creating or modifying a Halo CMS plugin: writing Java backend code,
-  configuring plugin.yaml, defining custom extensions (GVK), creating custom APIs
-  (CustomEndpoint, MVC controllers), building Vue-based UI with @halo-dev/ui-shared,
-  setting up Gradle builds with DevTools, defining RBAC role templates, declaring
-  pluginDependencies, exposing or consuming plugin extension points, publishing
-  shared events, registering custom FormKit inputs, generating API clients from
-  OpenAPI, registering theme-side Finder APIs, or handling plugin lifecycle
-  (start/stop/delete).
+  Create or modify Halo CMS plugins, including Java backend code, plugin.yaml and
+  extension resources, Gradle and DevTools configuration, plugin APIs and lifecycle,
+  and Vue-based Console or User Center UI. Use for Halo plugin implementation,
+  migration, debugging, or integration work; do not use for theme-only changes.
 ---
 
 # Halo Plugin Development
@@ -16,10 +12,10 @@ description: >
 Halo is built on **Spring Boot + Spring WebFlux + Vue 3**. A plugin consists of:
 
 - **Backend (Java)**: runs inside Halo's JVM, uses Spring DI, reactive WebFlux, custom extensions (CRD-like), and custom APIs
-- **Frontend (Vue/TypeScript)**: built into `main.js` + `style.css`, injected into Console and UC (User Center)
+- **Frontend (Vue/TypeScript)**: built as an IIFE or ESM UI provider for Console and UC (User Center)
 - **Manifest (`plugin.yaml`)**: plugin metadata, dependencies, settings, and config map names
 
-> **Important**: Halo's plugin APIs, VO field names, extension annotations, and UI APIs evolve across versions. **Do not rely on training data for specific field names, method signatures, or type structures.** When writing code that accesses extension fields or calls shared beans, always fetch the relevant online doc from the References section below first.
+> **Version first**: inspect the target project's Halo platform dependency and `plugin.yaml` `spec.requires` before choosing an API or build format. Use the references below for Halo-specific invariants and workflow guidance. For version-sensitive field names, signatures, and UI contracts, follow the official documentation routes linked from the relevant reference instead of guessing or silently raising `spec.requires`.
 
 ## Quick Start
 
@@ -55,7 +51,7 @@ Or use `watch` for auto-reload:
 
 1. **Scaffold**: `pnpm create halo-plugin`
 2. **Backend**: write Java code under `src/main/java/`
-3. **Frontend**: write Vue/TS code under `ui/src/` (or `console/src/`)
+3. **Frontend**: write Vue/TS code under the project's existing UI source directory, normally `ui/src/`
 4. **Manifest**: configure `src/main/resources/plugin.yaml`
 5. **Extensions**: declare YAML resources under `src/main/resources/extensions/`
 6. **Run**: `./gradlew haloServer` (with Docker)
@@ -88,4 +84,4 @@ Or use `watch` for auto-reload:
 | [references/server-search.md](references/server-search.md)                 | HaloDocument, HaloDocumentsProvider, SearchEngine, search events                                  | Integrating with Halo search (indexing, searching, search events)                                                                         |
 | [references/theme-head-processor.md](references/theme-head-processor.md)   | TemplateHeadProcessor for injecting scripts/styles/meta into theme head                           | Injecting scripts, styles, or meta tags into the theme `<head>`                                                                           |
 | [references/theme-content-handler.md](references/theme-content-handler.md) | ReactivePostContentHandler / ReactiveSinglePageContentHandler for modifying rendered HTML         | Modifying post or page HTML after rendering                                                                                               |
-| [references/theme-integration.md](references/theme-integration.md)         | Finder API for themes, template variables, reverse proxy, static resources, CommentSubject        | Adding theme-side template variables or Finder APIs                                                                                       |
+| [references/theme-integration.md](references/theme-integration.md)         | Finder API for themes, template variables, page-layout contract, reverse proxy, static resources  | Adding theme-side template variables, Finder APIs, or plugin-rendered frontend pages                                                      |

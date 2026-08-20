@@ -8,7 +8,10 @@ Halo provides `@halo-dev/api-client` for making API calls from plugin Vue/TypeSc
 pnpm install @halo-dev/api-client axios
 ```
 
-> `@halo-dev/ui-plugin-bundler-kit@2.17.0+` already excludes `@halo-dev/api-client` and `axios` from the bundle — the final build will use Halo's own copies. If using these versions, set `spec.requires: ">=2.17.0"` in `plugin.yaml`.
+> The bundler kit reuses Halo-provided `@halo-dev/api-client` and `axios`. IIFE
+> builds use compatibility globals; Halo 2.26+ ESM builds use shared runtime
+> modules. Continue using normal package imports and keep dependency versions
+> compatible with the target Halo runtime.
 
 ## Built-in API Clients
 
@@ -27,6 +30,11 @@ import {
 ## Error Handling
 
 Halo adds global response interceptors to the shared Axios instance used by `@halo-dev/api-client`. Request failures from `coreApiClient`, `consoleApiClient`, `ucApiClient`, `publicApiClient`, generated clients constructed with `axiosInstance`, or direct `axiosInstance` calls already show Halo-managed error toasts.
+
+The standard module imported directly from `axios` is not `axiosInstance`: it
+does not contain Halo authentication or unified error handling. Do not mutate
+either module's global defaults or interceptors. Use `axios.create()` when an
+independent Axios configuration is required.
 
 - Do not add local `try/catch`, `catch`, or `useMutation.onError` handlers that call `Toast.error` / `Toast.warning` for those Axios request failures. Doing so can show duplicate toasts.
 - Keep local toasts for non-Axios errors such as client-side validation, parsing failures, missing local prerequisites, or domain-specific messages created before a request is sent.

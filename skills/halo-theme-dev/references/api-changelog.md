@@ -12,6 +12,9 @@ High-impact changes:
 
 | Halo version | Change                                                                                                                                                                 | Skill reference                                    |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| 2.26.0       | Activated themes can provide Console/UC UI providers using IIFE or ESM, including async chunks                                                                         | [ui-plugin.md](ui-plugin.md)                       |
+| 2.26.0       | `templates/layout.html` can implement the `html(head, content)` page-layout contract for plugin-rendered pages                                                         | [page-layout.md](page-layout.md)                   |
+| 2.26.0       | `postFinder.list({...})` accepts optional `pinned: true` or `pinned: false` filtering                                                                                  | [finder-apis.md](finder-apis.md)                   |
 | 2.25.0       | `select` options support `icon` and `description`; remote selects support `requestOption.iconField` and `descriptionField`                                             | [structure-and-config.md](structure-and-config.md) |
 | 2.25.0       | Theme root may include `screenshot.png`, `screenshot.jpeg`, `screenshot.jpg`, or `screenshot.webp`; Halo exposes the first readable image as `Theme.status.screenshot` | [structure-and-config.md](structure-and-config.md) |
 | 2.25.0       | `#halo.matchVersion(constraint)` supports conditional rendering for newer Halo-only fragments                                                                          | [global-variables.md](global-variables.md)         |

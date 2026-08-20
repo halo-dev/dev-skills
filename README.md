@@ -6,11 +6,11 @@ A collection of agent skills for [Halo](https://github.com/halo-dev/halo) develo
 
 ## What are Agent Skills?
 
-Agent skills are structured knowledge packages that give AI agents (like Cursor, Codex, etc.) deep, task-specific context about a domain. Each skill includes:
+Agent skills are structured knowledge packages that give AI agents (like Cursor, Codex, etc.) deep, task-specific context about a domain. Depending on its workflow, a skill can include:
 
 - A `SKILL.md` entry point with quick references and a workflow guide
 - `references/` files with focused, concise documentation
-- `assets/` with ready-to-use starter templates
+- optional `assets/` with ready-to-use starter templates
 
 ## Installation
 
@@ -38,6 +38,7 @@ Everything needed to build a complete Halo theme from scratch.
 - Thymeleaf layout fragments and template routing
 - Template variables and Finder API usage
 - Static resource management and Vite integration via [`vite-plugin-halo-theme`](https://github.com/halo-sigs/vite-plugin-halo-theme)
+- Halo 2.26+ page-layout integration and optional Console/UC theme UI providers
 - FormKit Schema for building theme settings UI
 - Model metadata (Annotations) — defining and reading custom fields
 - Custom template tags (`halo:comment`, `halo:footer`)
@@ -59,7 +60,7 @@ Everything needed to build a complete Halo plugin from scratch.
 - Plugin lifecycle (`BasePlugin` start/stop/delete) with `SchemeManager` registration and cleanup
 - RBAC role templates with view/manage roles and anonymous aggregation
 - Vue 3 frontend: `definePlugin`, route registration for Console and User Center
-- UI build setup via `@halo-dev/ui-plugin-bundler-kit` (Vite/Rsbuild)
+- IIFE/ESM UI build and packaging via `@halo-dev/ui-plugin-bundler-kit` (Vite/Rsbuild)
 - Theme integration via `@Finder` annotation for Thymeleaf template variables
 - DevTools workflow (`haloServer`, `reload`, `watch`) and OpenAPI client generation
 
@@ -69,10 +70,9 @@ Everything needed to build a complete Halo plugin from scratch.
 skills/
 └── <skill-name>/
     ├── SKILL.md          # Entry point — read this first
-    ├── agents/
-    │   └── openai.yaml   # Skill metadata
-    ├── references/       # Focused reference files
-    └── assets/           # Starter templates and examples
+    ├── agents/           # Optional UI metadata and invocation policy
+    ├── references/       # Optional focused reference files
+    └── assets/           # Optional starter templates and output assets
 ```
 
 ## Contributing

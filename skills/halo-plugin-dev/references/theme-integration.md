@@ -197,3 +197,31 @@ When building APIs consumed by the theme:
 Example: `/apis/api.my-plugin.halo.run/v1alpha1/persons`
 
 These should have role templates aggregated to `anonymous` for public access.
+
+## Reusing the active theme layout (Halo 2.26+)
+
+A plugin-rendered frontend template can call the active theme's standard
+`templates/layout.html` contract:
+
+```html
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{layout :: html(head = ~{::head}, content = ~{::content})}"
+>
+  <th:block th:fragment="head">
+    <title>Plugin page - [[${site.title}]]</title>
+  </th:block>
+  <th:block th:fragment="content">
+    <main>Plugin page content</main>
+  </th:block>
+</html>
+```
+
+`layout` is a reserved integration template name only for plugin-provided
+templates resolved through `plugin:<plugin-name>:...`. Do not ship a plugin-local
+`templates/layout.html` expecting it to replace the active theme contract. Use a
+different, explicitly prefixed template name for private plugin layouts.
+
+Themes without a valid `html(head, content)` contract fall back to Halo's built-in
+layout, so plugin pages must not depend on private theme variables for essential
+content.

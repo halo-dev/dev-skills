@@ -1,147 +1,115 @@
-# UI Build (@halo-dev/ui-plugin-bundler-kit)
+# UI Build (`@halo-dev/ui-plugin-bundler-kit`)
 
-Halo plugins use `@halo-dev/ui-plugin-bundler-kit` to build Vue/TypeScript frontend code into `main.js` + `style.css`.
+Use the bundler kit rather than recreating Halo's UI-provider output protocol.
+First inspect the installed bundler-kit version, `plugin.yaml` `spec.requires`, and
+the project's existing Vite or Rsbuild configuration.
 
-> - [NPM: @halo-dev/ui-plugin-bundler-kit](https://www.npmjs.com/package/@halo-dev/ui-plugin-bundler-kit)
-> - [NPM: @halo-dev/ui-shared](https://www.npmjs.com/package/@halo-dev/ui-shared)
-> - [NPM: @halo-dev/api-client](https://www.npmjs.com/package/@halo-dev/api-client)
+Official documentation:
 
-## Build Tool Options
+- https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/basics/ui/build.md
+- https://raw.githubusercontent.com/halo-dev/docs/refs/heads/main/docs/developer-guide/plugin/api-changelog.md
 
-| Feature           | Vite      | Rsbuild (recommended for complex plugins) |
-| ----------------- | --------- | ----------------------------------------- |
-| Code splitting    | Limited   | Excellent                                 |
-| Build performance | Good      | Excellent                                 |
-| Vue ecosystem     | Excellent | Good                                      |
-| Dev experience    | Excellent | Excellent                                 |
-| Dynamic imports   | Limited   | Excellent                                 |
+## Choose the existing build tool
 
-## Vite Setup
+Both Vite and Rsbuild support IIFE and ESM providers. Preserve the project's
+current tool unless the user asks to migrate it.
+
+For a new Halo 2.26+ setup, use the build-tool-specific entry and install its Vue
+plugin peer dependency.
+
+### Vite
 
 ```bash
-pnpm install @halo-dev/ui-plugin-bundler-kit@2.22.0 vite -D
+pnpm install @halo-dev/ui-plugin-bundler-kit@2.26.0 vite @vitejs/plugin-vue -D
 ```
 
 ```ts
-// vite.config.ts
-import { viteConfig } from "@halo-dev/ui-plugin-bundler-kit";
+import { viteConfig } from "@halo-dev/ui-plugin-bundler-kit/vite";
 
 export default viteConfig();
 ```
 
-```json
-// package.json
-{
-  "type": "module",
-  "scripts": {
-    "dev": "vite build --watch --mode=development",
-    "build": "vite build"
-  }
-}
-```
-
-### With Customizations
-
-```ts
-import { viteConfig } from "@halo-dev/ui-plugin-bundler-kit";
-import path from "path";
-
-export default viteConfig({
-  vite: {
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "src"),
-      },
-    },
-    plugins: [
-      // Additional Vite plugins (Vue plugin is pre-configured)
-    ],
-  },
-});
-```
-
-## Rsbuild Setup
+### Rsbuild
 
 ```bash
-pnpm install @halo-dev/ui-plugin-bundler-kit@2.22.0 @rsbuild/core -D
+pnpm install @halo-dev/ui-plugin-bundler-kit@2.26.0 @rsbuild/core @rsbuild/plugin-vue -D
 ```
 
 ```ts
-// rsbuild.config.ts
-import { rsbuildConfig } from "@halo-dev/ui-plugin-bundler-kit";
+import { rsbuildConfig } from "@halo-dev/ui-plugin-bundler-kit/rsbuild";
 
 export default rsbuildConfig();
 ```
 
-```json
-// package.json
-{
-  "type": "module",
-  "scripts": {
-    "dev": "rsbuild build --env-mode development --watch",
-    "build": "rsbuild build"
-  }
-}
+The package-root `viteConfig` and `rsbuildConfig` exports are compatibility
+aliases in 2.26 and are planned for removal in 2.27. Preserve them only when the
+project is pinned to an older bundler kit that lacks the specific entry.
+
+The presets already create the Vue plugin. Configure Vue compilation through
+the top-level `vue` option; do not add another Vue plugin instance.
+
+## Output format and Halo target
+
+`format` accepts `"auto"`, `"iife"`, or `"esm"`. The default `"auto"` mode only
+infers a target from a stable version such as `2.26.0` or a simple minimum such
+as `>=2.26.0`:
+
+- Target 2.26.0 or newer: ESM.
+- Older target: IIFE.
+- A wildcard or compound range that cannot establish a minimum: warn and fall
+  back to IIFE.
+
+Use an explicit `format: "iife"` when an existing project cannot yet satisfy the
+ESM contract. Use `targetHaloVersion` only when an explicit ESM build cannot be
+derived from `spec.requires`; it does not change the plugin's installation
+compatibility. Keep `spec.requires` consistent with the runtime needed by the
+emitted provider.
+
+## ESM artifact contract
+
+An ESM build includes generated provider metadata and may contain hashed entry,
+style, chunk, and asset files:
+
+```text
+ui/build/dist/
+├── ui-plugin.json
+├── main.<hash>.js
+├── style.<hash>.css
+├── chunks/
+└── assets/
 ```
 
-### With Customizations
+Treat the complete directory as one artifact:
 
-```ts
-import { rsbuildConfig } from "@halo-dev/ui-plugin-bundler-kit";
+- Do not create, copy, or edit `ui-plugin.json` manually.
+- Do not copy only the startup entry and stylesheet.
+- Do not assume fixed entry or style filenames; use the generated metadata.
+- Custom output format, asset paths, externals, or filenames can invalidate the
+  manifest, Import Map resolution, dependency identity, and cache behavior.
 
-export default rsbuildConfig({
-  rsbuild: {
-    source: {
-      alias: {
-        "@": "./src",
-      },
-    },
-    plugins: [
-      // Additional Rsbuild plugins
-    ],
-  },
-});
-```
+## Shared runtime dependencies
 
-## Output Directories
+Halo 2.26 ESM providers can import supported package roots such as Vue, Vue
+Router, Pinia, Axios, FormKit, and public Halo UI packages from Halo's shared
+runtime. Do not deep-import a shared package or expose an unlisted dependency as
+an external merely to reduce bundle size. The exact list is version-sensitive;
+read the official UI-build documentation for the target version.
 
-| Environment | Output Path                                                                               |
-| ----------- | ----------------------------------------------------------------------------------------- |
-| Development | `build/resources/main/console/`                                                           |
-| Production  | `ui/build/dist/` (temporary, Gradle copies to `src/main/resources/console/` during build) |
+An ESM entry must still default-export its `PluginModule`. Avoid top-level route
+registration and other irreversible side effects. Halo isolates provider load
+failures, but it cannot roll back timers or listeners created during module
+evaluation. A full Console or UC refresh is the supported replacement boundary
+after installing, upgrading, enabling, disabling, or reloading a provider.
 
-## Dynamic Imports (Rsbuild)
+## Gradle packaging
 
-```ts
-import { definePlugin } from "@halo-dev/ui-shared";
-import { defineAsyncComponent } from "vue";
-import { VLoading } from "@halo-dev/components";
-
-export default definePlugin({
-  routes: [
-    {
-      parentName: "Root",
-      route: {
-        path: "heavy-page",
-        name: "HeavyPage",
-        component: defineAsyncComponent({
-          loader: () => import("./views/HeavyPage.vue"),
-          loadingComponent: VLoading,
-        }),
-      },
-    },
-  ],
-});
-```
-
-## Gradle Integration
-
-In the root `build.gradle`:
+Production output normally stays in `ui/build/dist`. Copy the complete directory
+to the build output, not into source-controlled resources:
 
 ```groovy
 tasks.register('processUiResources', Copy) {
     from project(':ui').layout.buildDirectory.dir('dist')
-    into layout.buildDirectory.dir('resources/main/console')
+    into layout.buildDirectory.dir('resources/main/ui')
     dependsOn project(':ui').tasks.named('assemble')
     shouldRunAfter tasks.named('processResources')
 }
@@ -151,23 +119,18 @@ tasks.named('classes') {
 }
 ```
 
-In `ui/build.gradle`:
+For development builds targeting Halo 2.25 or newer, the preset uses
+`build/resources/main/ui`; older targets may continue using
+`build/resources/main/console`. `console` is a compatibility path, not the
+recommended path for new projects.
 
-```groovy
-plugins {
-    id 'base'
-    id "com.github.node-gradle.node" version "7.1.0"
-}
+## Verification
 
-tasks.register('buildFrontend', PnpmTask) {
-    group = 'build'
-    args = ['build']
-    dependsOn tasks.named('pnpmInstall')
-    inputs.dir(layout.projectDirectory.dir('src'))
-    outputs.dir(layout.buildDirectory.dir('dist'))
-}
+After changing the build configuration:
 
-tasks.named('assemble') {
-    dependsOn tasks.named('buildFrontend')
-}
-```
+1. Run the repository-pinned package manager and the UI build.
+2. Inspect the complete emitted directory and `ui-plugin.json` when present.
+3. Build the plugin JAR and confirm the same complete directory is packaged
+   under `ui/`.
+4. Load Console and UC in the target Halo version. Exercise at least one async
+   route or asset when the provider emits chunks.

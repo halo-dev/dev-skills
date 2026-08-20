@@ -46,6 +46,13 @@ spec:
 | `spec.configMapName`                  | ConfigMap name for persisting config. Suffix with `-configmap`. Required if `settingName` is set          | Conditional |
 | `spec.pluginDependencies`             | Map of `pluginName: versionRange`. Optional deps suffix name with `?` (Halo 2.20.11+)                     | Optional    |
 
+From `@halo-dev/ui-plugin-bundler-kit@2.26.0`, `spec.requires` also drives
+automatic UI output selection. Only a stable version such as `2.26.0` or a
+simple minimum such as `>=2.26.0` can establish the ESM target. Compound or
+wildcard ranges may be valid installation constraints but fall back to IIFE
+when the bundler cannot infer a minimum. Do not change `spec.requires` merely to
+select a format; it must describe the plugin's real runtime compatibility.
+
 ## Plugin Dependencies
 
 For dependency design, optional dependencies, and API modules, see

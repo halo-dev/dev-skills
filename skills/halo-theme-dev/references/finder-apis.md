@@ -34,6 +34,7 @@ Use `th:with` to bind the result in the current scope:
 ## Common Notes
 
 - `postFinder.list({...})` is the recommended unified query method (all parameters are optional); it supersedes the deprecated `list(page, size)`, `listByCategory(...)`, etc.
+- Halo 2.26+ adds optional `pinned` filtering to `postFinder.list({...})`: `true` returns only pinned posts, `false` only non-pinned posts, and omission preserves the unfiltered behavior.
 - Halo 2.25+ adds `postFinder.cursorByCategory(postName)` for previous/next posts inside the current post's primary category. It only matches the same category and does not include child categories.
 - Halo 2.24.1+ adds `postFinder.random(maxSize)` for random published posts.
 - Halo 2.22+ changed `postFinder.cursor(postName)`: the result no longer has `current`; `previous` and `next` are `ListedPostVo`.

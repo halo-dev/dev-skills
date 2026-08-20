@@ -12,6 +12,9 @@ High-impact changes:
 
 | Halo version | Change                                                                                                                         | Skill reference                                                      |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| 2.26.0       | UI providers support ESM, async chunks, generated `ui-plugin.json`, shared runtime dependencies, and isolated loading          | [ui-build.md](ui-build.md)                                           |
+| 2.26.0       | Vite and Rsbuild configs move to `/vite` and `/rsbuild` package entries; package-root exports are deprecated                   | [ui-build.md](ui-build.md)                                           |
+| 2.26.0       | `stores.uiPlugins()` reports discovered and registered plugin or activated-theme UI providers                                  | [ui-shared.md](ui-shared.md)                                         |
 | 2.25.0       | `select` options support `icon` and `description`; remote selects support `requestOption.iconField` and `descriptionField`     | [ui-forms.md](ui-forms.md)                                           |
 | 2.25.0       | Plugin UI can register custom FormKit inputs through `definePlugin({ formkit: { inputs } })`                                   | [ui-entry.md](ui-entry.md), [ui-forms.md](ui-forms.md)               |
 | 2.25.0       | `secret` FormKit input supports `descriptionPreset`                                                                            | [ui-forms.md](ui-forms.md)                                           |

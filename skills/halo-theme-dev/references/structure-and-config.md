@@ -10,6 +10,7 @@ my-theme/
 │   │   │   └── style.css
 │   │   └── js/
 │   │       └── main.js
+│   ├── layout.html           # Optional Halo 2.26+ page-layout contract
 │   ├── index.html            # Home page
 │   ├── post.html             # Post detail
 │   ├── page.html             # Single page detail
@@ -28,6 +29,12 @@ my-theme/
 Halo 2.25+ recognizes the first readable root preview image in this order:
 `screenshot.png`, `screenshot.jpeg`, `screenshot.jpg`, `screenshot.webp`. The
 resolved URL is exposed as `Theme.status.screenshot`.
+
+Halo 2.26+ recognizes `templates/layout.html` as the optional page-layout
+contract used by plugin-rendered frontend pages. It must declare an
+`html(head, content)` fragment. Read [page-layout.md](page-layout.md) before
+adding or changing this file; an internal-only layout should use another path
+such as `templates/modules/layout.html`.
 
 ## theme.yaml
 

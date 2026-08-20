@@ -29,6 +29,7 @@ my-theme/
 │   ├── partials/             # Not treated as page entries; referenced via include
 │   │   ├── layout.html       # Shared layout
 │   │   └── post-card.html    # Reusable post card component
+│   ├── layout.html            # Halo 2.26+ runtime page-layout contract
 │   ├── index.html            # Home page entry → templates/index.html
 │   ├── post.html             # → templates/post.html
 │   ├── page.html
@@ -151,6 +152,15 @@ Use in a page:
 ```
 
 Always write asset paths as if the file is in `src/`, even when it is inside `src/partials/`.
+
+## Runtime page-layout contract (Halo 2.26+)
+
+The build-time `src/partials/layout.html` used by `<include>` and `<slot>` is
+independent of Halo's runtime Thymeleaf contract. To let plugin-rendered frontend
+pages reuse the active theme shell, also provide a root `src/layout.html` entry
+that builds to `templates/layout.html` and declares `th:fragment="html (head,
+content)"`. Read [page-layout.md](page-layout.md) for the required signature and
+fallback behavior.
 
 ---
 

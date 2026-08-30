@@ -1,9 +1,14 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" th:fragment="html (head, content)">
+<html
+  lang="en"
+  xmlns:th="https://www.thymeleaf.org"
+  th:lang="${#locale.toLanguageTag}"
+  th:fragment="html (head, content)"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${site.title}">Site Title</title>
+    <title th:if="${head == null}" th:text="${site.title}">Site Title</title>
     <link rel="stylesheet" th:href="@{/assets/css/style.css?v={v}(v=${theme.spec.version})}" />
     <th:block th:if="${head != null}">
       <th:block th:replace="${head}" />

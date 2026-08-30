@@ -4,10 +4,9 @@
 
 ## 什么是 Agent Skills？
 
-Agent Skills 是结构化的知识包，为 AI Agent（如 Cursor、Codex 等）提供特定领域的深度上下文。根据工作流需要，skill 可以包含：
+Agent Skills 为 AI Agent（如 Cursor、Codex 等）提供特定任务工作流。这两个 skill 会识别目标 Halo 版本、按需获取相关的官方 Markdown 文档，并仅在本地保留不易替代的开发约束。skill 可以包含：
 
-- `SKILL.md` 入口文件，包含快速参考和开发工作流指南
-- `references/` 目录，存放聚焦、简洁的参考文档
+- `SKILL.md` 入口文件，包含文档路由和开发工作流指南
 - 可选的 `assets/` 目录，提供开箱即用的起始模板
 
 ## 安装
@@ -28,7 +27,7 @@ npx skills add halo-dev/dev-skills@halo-plugin-dev
 
 ### [`halo-theme-dev`](skills/halo-theme-dev/)
 
-从零开始构建完整 Halo 主题所需的一切。
+用于创建、修改、调试和打包 Halo 主题的版本感知工作流。执行任务时按需获取[主题 Markdown 文档索引](https://docs.halo.run/developer-guide/theme/index.md)中的最新内容。
 
 **涵盖内容：**
 
@@ -50,7 +49,7 @@ npx skills add halo-dev/dev-skills@halo-plugin-dev
 
 ### [`halo-plugin-dev`](skills/halo-plugin-dev/)
 
-从零开始构建完整 Halo 插件所需的一切。
+用于创建、修改、迁移和调试 Halo 插件的版本感知工作流。执行任务时按需获取[插件 Markdown 文档索引](https://docs.halo.run/developer-guide/plugin/index.md)中的最新内容。
 
 **涵盖内容：**
 
@@ -70,7 +69,6 @@ skills/
 └── <skill-name>/
     ├── SKILL.md          # 入口文件，优先阅读
     ├── agents/           # 可选的 UI 元信息和调用策略
-    ├── references/       # 可选的参考文档
     └── assets/           # 可选的起始模板与输出资源
 ```
 
@@ -81,7 +79,8 @@ skills/
 ## 相关链接
 
 - [Halo](https://github.com/halo-dev/halo) — 开源 CMS
-- [Halo 开发者文档](https://docs.halo.run/developer-guide/theme/structure) — 官方文档
+- [Halo 开发者文档](https://docs.halo.run/developer-guide/index.md) — 官方文档
+- [Halo LLM 文档索引](https://docs.halo.run/llms.txt) — Markdown 文档路由
 - [theme-starter](https://github.com/halo-dev/theme-starter) — 最小主题模板
 - [theme-vite-starter](https://github.com/halo-dev/theme-vite-starter) — 基于 Vite 的主题模板
 - [plugin-starter](https://github.com/halo-dev/plugin-starter) — 最小插件模板

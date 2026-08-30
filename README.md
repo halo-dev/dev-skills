@@ -6,10 +6,9 @@ A collection of agent skills for [Halo](https://github.com/halo-dev/halo) develo
 
 ## What are Agent Skills?
 
-Agent skills are structured knowledge packages that give AI agents (like Cursor, Codex, etc.) deep, task-specific context about a domain. Depending on its workflow, a skill can include:
+Agent skills give AI agents (like Cursor and Codex) task-specific workflows. These skills identify the target Halo version, fetch only the relevant official Markdown documentation, and keep non-obvious development constraints close to the task. A skill can include:
 
-- A `SKILL.md` entry point with quick references and a workflow guide
-- `references/` files with focused, concise documentation
+- A `SKILL.md` entry point with documentation routing and workflow guidance
 - optional `assets/` with ready-to-use starter templates
 
 ## Installation
@@ -30,7 +29,7 @@ npx skills add halo-dev/dev-skills@halo-plugin-dev
 
 ### [`halo-theme-dev`](skills/halo-theme-dev/)
 
-Everything needed to build a complete Halo theme from scratch.
+A version-aware workflow for creating, modifying, debugging, and packaging Halo themes. It retrieves current documentation from the [theme Markdown index](https://docs.halo.run/developer-guide/theme/index.md) on demand.
 
 **Covers:**
 
@@ -51,7 +50,7 @@ Everything needed to build a complete Halo theme from scratch.
 
 ### [`halo-plugin-dev`](skills/halo-plugin-dev/)
 
-Everything needed to build a complete Halo plugin from scratch.
+A version-aware workflow for creating, modifying, migrating, and debugging Halo plugins. It retrieves current documentation from the [plugin Markdown index](https://docs.halo.run/developer-guide/plugin/index.md) on demand.
 
 **Covers:**
 
@@ -71,7 +70,6 @@ skills/
 └── <skill-name>/
     ├── SKILL.md          # Entry point — read this first
     ├── agents/           # Optional UI metadata and invocation policy
-    ├── references/       # Optional focused reference files
     └── assets/           # Optional starter templates and output assets
 ```
 
@@ -82,7 +80,8 @@ To add a new skill, see the [skill creator guide](https://github.com/halo-dev/ha
 ## Related
 
 - [Halo](https://github.com/halo-dev/halo) — the open source CMS
-- [Halo Developer Docs](https://docs.halo.run/developer-guide/theme/structure) — official documentation
+- [Halo Developer Docs](https://docs.halo.run/developer-guide/index.md) — official documentation
+- [Halo Documentation Index for LLMs](https://docs.halo.run/llms.txt) — Markdown documentation routes
 - [theme-starter](https://github.com/halo-dev/theme-starter) — minimal theme template
 - [theme-vite-starter](https://github.com/halo-dev/theme-vite-starter) — Vite-based theme template
 - [plugin-starter](https://github.com/halo-dev/plugin-starter) — minimal plugin template

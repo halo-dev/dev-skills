@@ -10,60 +10,62 @@ description: >
 
 # Halo Theme Development
 
-Halo is built on **Spring Boot + Spring WebFlux + Thymeleaf**. Themes use Thymeleaf templates for frontend page rendering.
+Work from the target theme and fetch current Halo documentation only when the
+task needs a Halo-specific contract. Do not rely on Finder signatures, template
+variables, or configuration fields recalled from training data.
 
-> **Version first**: inspect `theme.yaml` `spec.requires` and the target Halo version before choosing an API. Use the references below for Halo-specific invariants and workflow guidance. For version-sensitive template variables and Finder signatures, follow the official documentation routes linked from the relevant reference instead of guessing or silently raising `spec.requires`.
+## Establish the Target
 
-## Thymeleaf Quick Reference
+- Inspect `theme.yaml`, `settings.yaml`, the package manifest and build config,
+  and representative templates before editing.
+- Determine `theme.yaml` `spec.requires` and the actual Halo version. Do not
+  silently raise the requirement or replace the theme's build system.
+- Identify whether runtime templates are authored directly in `templates/` or
+  generated from a source directory such as `src/`.
 
-Full docs: https://raw.githubusercontent.com/thymeleaf/thymeleaf-docs/refs/heads/master/docs/tutorials/3.1/usingthymeleaf.md
+## Fetch Documentation on Demand
 
-Core syntax cheatsheet:
+1. Start with the [theme documentation index](https://docs.halo.run/developer-guide/theme/index.md)
+   when the task involves Halo theme configuration, templates, Finder APIs,
+   global variables, assets, annotations, i18n, packaging, or plugin integration.
+2. Use the complete [Halo documentation index](https://docs.halo.run/llms.txt)
+   only when the route is unclear or the task crosses documentation sections.
+3. Fetch only the Markdown pages relevant to the current task. Do not load
+   `llms-full.txt` by default.
+4. For version-sensitive work, also read the [theme API changelog](https://docs.halo.run/developer-guide/theme/api-changelog.md),
+   then verify exact fields and signatures against the target version or existing
+   templates. The target version wins over current-site docs.
 
-```html
-<!-- Output text -->
-<h1 th:text="${site.title}"></h1>
+If online docs are unavailable, continue from the target checkout and installed
+dependencies when possible, and disclose what could not be verified instead of
+guessing.
 
-<!-- Output unescaped HTML -->
-<div th:utext="${post.content.content}"></div>
+## Halo-Specific Boundaries
 
-<!-- Links -->
-<a th:href="@{${post.status.permalink}}">Post link</a>
-<link rel="stylesheet" th:href="@{/assets/dist/style.css}" />
-
-<!-- Loop -->
-<li th:each="post : ${posts.items}" th:text="${post.spec.title}"></li>
-
-<!-- Conditionals -->
-<div th:if="${posts.hasNext()}">Next page</div>
-<div th:unless="${posts.hasNext()}">Last page</div>
-
-<!-- Local variable -->
-<div th:with="menu = ${menuFinder.getPrimary()}">...</div>
-
-<!-- Fragment include -->
-<div th:replace="~{fragments/header :: header}"></div>
-
-<!-- Layout reuse: pages pass fragments into a parameterized layout -->
-<html th:replace="~{layout :: html(head = null, content = ~{::content})}">
-  <th:block th:fragment="content"><!-- page body --></th:block>
-</html>
-
-<!-- Inline JavaScript -->
-<script th:inline="javascript">
-  var url = '[(${#theme.assets("/dist/main.iife.js")})]';
-</script>
-```
-
-## Development Workflow
-
-1. Create a theme folder under `themes/` in the Halo working directory (must match `metadata.name` in `theme.yaml`)
-2. Write `theme.yaml` (required) and `settings.yaml` (optional)
-3. Create template files under `templates/`
-4. Install and activate the theme in Console → Theme Management
-5. Visit the frontend to verify
-
-Disable Thymeleaf caching during development: set env var `SPRING_THYMELEAF_CACHE=false` (Docker), or `spring.thymeleaf.cache: false` in config (source mode).
+- Keep the theme directory name aligned with `theme.yaml` `metadata.name`.
+- In a build-tool theme, edit source templates and assets, then run the existing
+  build; do not hand-edit generated `templates/` output or hashed assets.
+- Read the current [Thymeleaf guide](https://docs.halo.run/developer-guide/theme/thymeleaf.md)
+  before writing expressions. Halo 2.26 uses Thymeleaf 3.1, where `#request`,
+  `#response`, `#session`, and `#servletContext` are unavailable. Do not guess
+  expression methods or derive page URLs from request objects; use documented
+  template variables and permalinks.
+- Treat site identity and global injection as Halo-owned by default. Use
+  `site.logo`, system SEO settings, Halo's head processing, and `<halo:footer />`;
+  add a theme setting only for a theme-specific override with a system fallback.
+  Check the current [settings guide](https://docs.halo.run/developer-guide/theme/settings.md)
+  before adding fields to `settings.yaml`.
+- Do not duplicate Halo-injected description or keywords. Canonical, Open Graph,
+  Twitter Card, and structured data are optional theme/plugin capabilities and
+  must follow the current [SEO guide](https://docs.halo.run/developer-guide/theme/seo.md)
+  with conflict-avoidance switches.
+- Preserve the project's established Thymeleaf layout and asset conventions.
+  Check the relevant docs before using a Finder method, template variable, Halo
+  utility, custom tag, or page-layout contract. When integrating official frontend
+  widgets, follow the shared color-scheme contract in the current
+  [plugin integration guide](https://docs.halo.run/developer-guide/theme/plugin-integration.md).
+- Use the starter assets below only when creating a new theme. Never replace an
+  existing theme with a starter.
 
 ## Starter Templates
 
@@ -74,22 +76,10 @@ The `assets/` directory provides two ready-to-use theme templates:
 
 Usage: copy the directory into `themes/` in your Halo working directory, ensure the folder name matches `metadata.name` in `theme.yaml`, then install and activate in Console.
 
-## References Index
+## Verify
 
-| File                                                                     | Content                                                                                                          | When to read                                                                    |
-| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| [references/api-changelog.md](references/api-changelog.md)               | High-impact theme API changes by Halo version, with docs routes                                                  | Before using version-sensitive APIs or raising `spec.requires`                  |
-| [references/structure-and-config.md](references/structure-and-config.md) | Directory structure, theme.yaml fields, root screenshot, settings.yaml form definition                           | Creating a theme, configuring theme.yaml/settings.yaml                          |
-| [references/vite-plugin.md](references/vite-plugin.md)                   | vite-plugin-halo-theme integration guide, include/slot template syntax, TailwindCSS integration                  | Setting up a Vite-based theme (recommended)                                     |
-| [references/page-layout.md](references/page-layout.md)                   | Halo 2.26+ page-layout contract for plugin-rendered frontend pages                                               | Providing or changing `templates/layout.html`                                   |
-| [references/ui-plugin.md](references/ui-plugin.md)                       | Halo 2.26+ theme UI provider for Console and User Center                                                         | Extending Console or UC from an activated theme                                 |
-| [references/templates.md](references/templates.md)                       | Template route mapping, available variables per template                                                         | Writing template files                                                          |
-| [references/global-variables.md](references/global-variables.md)         | Global variables (site, theme, theme.config) and type definitions                                                | Accessing site info or theme setting values                                     |
-| [references/finder-apis.md](references/finder-apis.md)                   | All Finder APIs (postFinder, categoryFinder, tagFinder, menuFinder, singlePageFinder, etc.)                      | Querying data from any template                                                 |
-| [references/static-resources.md](references/static-resources.md)         | Static asset reference methods (`@{}`, `#theme.assets()`)                                                        | Referencing CSS/JS/images in plain HTML themes                                  |
-| [references/template-tags.md](references/template-tags.md)               | Custom tags (halo:comment extension point, halo:footer injection)                                                | Integrating comment plugins, injecting footer code                              |
-| [references/i18n.md](references/i18n.md)                                 | Internationalization via `.properties` files, `#messages`, `#locale`, frontend i18n injection                    | Adding multi-language support to a theme                                        |
-| [references/official-plugins.md](references/official-plugins.md)         | Official plugin integration: pluginFinder.available(), search widget, dark mode color scheme adaptation          | Adding search, adapting dark mode for plugin UI                                 |
-| [references/annotations.md](references/annotations.md)                   | AnnotationSetting for model custom fields, `#annotations` utility for reading metadata in templates              | Adding custom fields to menu items/posts/categories and using them in templates |
-| [references/packaging.md](references/packaging.md)                       | Packaging a theme as a ZIP using `@halo-dev/theme-package-cli`                                                   | Preparing a theme for release or upload                                         |
-| [references/thymeleaf-tips.md](references/thymeleaf-tips.md)             | Halo-specific Thymeleaf best practices: literal substitutions, safe navigation, meta tag rules, permalink syntax | Writing any template file                                                       |
+Run the theme's existing build and package checks when applicable. Test every
+changed template type or integration path on a compatible Halo instance; at
+minimum cover the affected route plus one shared-layout consumer. Check rendered
+HTML, asset loading, pagination or empty states when relevant, and browser console
+errors.
